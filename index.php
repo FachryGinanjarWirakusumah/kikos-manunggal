@@ -806,7 +806,7 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
 <footer class="main-footer">
     <div class="footer-container">
-        <div class="footer-column">
+        <!-- <div class="footer-column">
             <div class="footer-group">
                 <h3 class="translatable" data-en="Tenant">Tenant</h3>
                 <ul>
@@ -824,9 +824,9 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
                     <li><a href="#" class="translatable" data-en="RuFinance">RuFinance</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
 
-        <div class="footer-column">
+        <!-- <div class="footer-column">
             <div class="footer-group">
                 <h3 class="translatable" data-en="Kinara For Business">kinara For Business</h3>
                 <ul>
@@ -842,7 +842,7 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
                     <li><a href="#" class="translatable" data-en="Our ESG Commitment">Komitmen ESG Kami</a></li>
                 </ul>
             </div>
-        </div>
+        </div> -->
 
         <div class="footer-column">
             <div class="footer-group">
