@@ -624,46 +624,48 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <span class="close-btn" id="closeLogin">&times;</span>
 
         <div id="loginFormContainer">
-            <h3>Selamat Datang</h3>
-            <p class="subtitle">Masuk untuk mulai mencari hunian impianmu.</p>
+            <h3 class="translatable" data-en="Welcome">Selamat Datang</h3>
+            <p class="subtitle translatable" data-en="Log in to start finding your dream home.">Masuk untuk mulai mencari hunian impianmu.</p>
 
             <form action="login_process.php" method="POST">
                 <div class="form-group">
-                    <label>Email atau Nomor HP</label>
-                    <input type="text" name="username" class="form-input" placeholder="contoh: email@anda.com" required>
+                    <label class="translatable" data-en="Email or Phone Number">Email atau Nomor HP</label>
+                    <input type="text" name="username" class="form-input translatable" data-en="e.g., email@yours.com" placeholder="contoh: email@anda.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-input" placeholder="Masukkan password" required>
+                    <label class="translatable" data-en="Password">Password</label>
+                    <input type="password" name="password" class="form-input translatable" data-en="Enter password" placeholder="Masukkan password" required>
                 </div>
-                <button type="submit" class="btn-submit">Masuk</button>
+                <button type="submit" class="btn-submit translatable" data-en="Login">Masuk</button>
             </form>
             <p class="signup-text">
-                Belum punya akun? <a href="javascript:void(0)" id="toRegister">Daftar Sekarang</a>
+                <span class="translatable" data-en="Don't have an account?">Belum punya akun?</span> 
+                <a href="javascript:void(0)" id="toRegister" class="translatable" data-en="Register Now">Daftar Sekarang</a>
             </p>
         </div>
 
         <div id="registerFormContainer" style="display: none;">
-            <h3>Daftar Akun Baru</h3>
-            <p class="subtitle">Lengkapi data diri untuk bergabung dengan Kinara.</p>
+            <h3 class="translatable" data-en="Create New Account">Daftar Akun Baru</h3>
+            <p class="subtitle translatable" data-en="Complete your details to join Kinara.">Lengkapi data diri untuk bergabung dengan Kinara.</p>
 
             <form action="register_process.php" method="POST">
                 <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" name="nama" class="form-input" placeholder="Nama sesuai KTP" required>
+                    <label class="translatable" data-en="Full Name">Nama Lengkap</label>
+                    <input type="text" name="nama" class="form-input translatable" data-en="Name exactly as on ID" placeholder="Nama sesuai KTP" required>
                 </div>
                 <div class="form-group">
-                    <label>Email / No. HP</label>
-                    <input type="text" name="kontak" class="form-input" placeholder="Email atau WhatsApp aktif" required>
+                    <label class="translatable" data-en="Email / Phone No.">Email / No. HP</label>
+                    <input type="text" name="kontak" class="form-input translatable" data-en="Active Email or WhatsApp" placeholder="Email atau WhatsApp aktif" required>
                 </div>
                 <div class="form-group">
-                    <label>Buat Password</label>
-                    <input type="password" name="password" class="form-input" placeholder="Minimal 8 karakter" required>
+                    <label class="translatable" data-en="Create Password">Buat Password</label>
+                    <input type="password" name="password" class="form-input translatable" data-en="Minimum 8 characters" placeholder="Minimal 8 karakter" required>
                 </div>
-                <button type="submit" class="btn-submit">Daftar User</button>
+                <button type="submit" class="btn-submit translatable" data-en="Register User">Daftar User</button>
             </form>
             <p class="signup-text">
-                Sudah punya akun? <a href="javascript:void(0)" id="toLogin">Masuk di sini</a>
+                <span class="translatable" data-en="Already have an account?">Sudah punya akun?</span> 
+                <a href="javascript:void(0)" id="toLogin" class="translatable" data-en="Log in here">Masuk di sini</a>
             </p>
         </div>
     </div>
@@ -694,54 +696,61 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
         </div>
         
 <div class="icon-filters">
-    <div class="filter-item"><i class="fas fa-wifi"></i><span>High-Speed Wi-Fi</span></div>
-    <div class="filter-item"><i class="fas fa-snowflake"></i><span>AC</span></div>
-    <div class="filter-item"><i class="fas fa-bath"></i><span>K. Mandi Dalam</span></div>
-    <div class="filter-item"><i class="fas fa-temperature-high"></i><span>Water Heater</span></div>
-    <div class="filter-item"><i class="fas fa-door-closed"></i><span>Lemari Pakaian</span></div>
-    <div class="filter-item"><i class="fas fa-couch"></i><span>Meja & Kursi</span></div>
-
-    <div class="filter-item"><i class="fas fa-tv"></i><span>TV Area Umum</span></div>
-    <div class="filter-item"><i class="fas fa-sink"></i><span>Dapur Bersama</span></div>
-    <div class="filter-item"><i class="fas fa-icicles"></i><span>Kulkas</span></div>
-    <div class="filter-item"><i class="fas fa-tshirt"></i><span>Mesin Cuci</span></div>
-    <div class="filter-item"><i class="fas fa-utensils"></i><span>Peralatan Makan</span></div>
-
-    <div class="filter-item"><i class="fas fa-fire"></i><span>Free Gas Refill</span></div> <div class="filter-item"><i class="fas fa-faucet"></i><span>Free Mineral Water</span></div>
-    <div class="filter-item"><i class="fas fa-hands-bubbles"></i><span>Layanan Kebersihan</span></div>
-    <div class="filter-item"><i class="fas fa-tools"></i><span>Free Maintenance</span></div>
-    <div class="filter-item"><i class="fas fa-broom"></i><span>Alat Kebersihan</span></div>
-</div>
+        <div class="filter-item"><i class="fas fa-wifi"></i><span class="translatable" data-en="High-Speed Wi-Fi">High-Speed Wi-Fi</span></div>
+        <div class="filter-item"><i class="fas fa-snowflake"></i><span class="translatable" data-en="AC">AC</span></div>
+        <div class="filter-item"><i class="fas fa-bath"></i><span class="translatable" data-en="Ensuite Bathroom">K. Mandi Dalam</span></div>
+        <div class="filter-item"><i class="fas fa-temperature-high"></i><span class="translatable" data-en="Water Heater">Water Heater</span></div>
+        <div class="filter-item"><i class="fas fa-door-closed"></i><span class="translatable" data-en="Wardrobe">Lemari Pakaian</span></div>
+        <div class="filter-item"><i class="fas fa-couch"></i><span class="translatable" data-en="Desk & Chair">Meja & Kursi</span></div>
+        
+        <div class="filter-item"><i class="fas fa-tv"></i><span class="translatable" data-en="Shared TV">TV Area Umum</span></div>
+        <div class="filter-item"><i class="fas fa-sink"></i><span class="translatable" data-en="Shared Kitchen">Dapur Bersama</span></div>
+        <div class="filter-item"><i class="fas fa-icicles"></i><span class="translatable" data-en="Refrigerator">Kulkas</span></div>
+        <div class="filter-item"><i class="fas fa-tshirt"></i><span class="translatable" data-en="Washing Machine">Mesin Cuci</span></div>
+        <div class="filter-item"><i class="fas fa-utensils"></i><span class="translatable" data-en="Cutlery">Peralatan Makan</span></div>
+        <div class="filter-item"><i class="fas fa-fire"></i><span class="translatable" data-en="Free Gas Refill">Free Gas Refill</span></div> 
+        
+        <div class="filter-item"><i class="fas fa-faucet"></i><span class="translatable" data-en="Free Mineral Water">Free Mineral Water</span></div>
+        <div class="filter-item"><i class="fas fa-hands-bubbles"></i><span class="translatable" data-en="Cleaning Service">Layanan Kebersihan</span></div>
+        <div class="filter-item"><i class="fas fa-tools"></i><span class="translatable" data-en="Free Maintenance">Free Maintenance</span></div>
+        <div class="filter-item"><i class="fas fa-broom"></i><span class="translatable" data-en="Cleaning Tools">Alat Kebersihan</span></div>
     </div>
+</div>
 
 <div class="slider-wrapper">
             <button class="slide-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
             
-            <div class="property-slider" id="propertySlider">
-                <?php
-                // AMBIL DATA KAMAR DARI DATABASE
-                $query_kamar = mysqli_query($conn, "SELECT * FROM kamar ORDER BY is_featured DESC, id DESC");
-                while($kamar = mysqli_fetch_assoc($query_kamar)): 
-                ?>
-                <div class="property-card" data-type="<?= $kamar['tipe']; ?>" style="<?= ($kamar['tipe'] == 'akhwat') ? 'display:none;' : ''; ?>">
-                    <div class="card-image">
-                        <img src="img/<?= $kamar['gambar']; ?>" alt="<?= $kamar['nama_kamar']; ?>" onerror="this.src='https://via.placeholder.com/500x300'">
-                        <?php if($kamar['is_featured']): ?>
-                            <div class="badge-rukita" style="background: #ffc107; color: #000;">FEATURED</div>
-                        <?php else: ?>
-                            <div class="badge-rukita">KINARA</div>
-                        <?php endif; ?>
-                        <div class="sisa-kamar">Status: <?= ucfirst($kamar['status']); ?></div>
-                    </div>
-                    <div class="card-info">
-                        <div class="property-type"><i class="fas fa-<?= $kamar['tipe'] == 'ikhwan' ? 'male' : 'female'; ?>"></i> Kost <?= ucfirst($kamar['tipe']); ?></div>
-                        <h3 class="property-name"><?= $kamar['nama_kamar']; ?></h3>
-                        <p class="property-location"><?= $kamar['lokasi']; ?></p>
-                        <div class="property-price">mulai dari <span>Rp <?= number_format($kamar['harga'], 0, ',', '.'); ?></span></div>
-                    </div>
+        <div class="property-slider" id="propertySlider">
+            <?php
+            // AMBIL DATA KAMAR DARI DATABASE
+            $query_kamar = mysqli_query($conn, "SELECT * FROM kamar ORDER BY is_featured DESC, id DESC");
+            while($kamar = mysqli_fetch_assoc($query_kamar)): 
+            ?>
+            <div class="property-card" data-type="<?= $kamar['tipe']; ?>" style="<?= ($kamar['tipe'] == 'akhwat') ? 'display:none;' : ''; ?>">
+                <div class="card-image">
+                    <img src="img/<?= $kamar['gambar']; ?>" alt="<?= $kamar['nama_kamar']; ?>" onerror="this.src='https://via.placeholder.com/500x300'">
+                    <?php if($kamar['is_featured']): ?>
+                        <div class="badge-rukita" style="background: #ffc107; color: #000;">FEATURED</div>
+                    <?php else: ?>
+                        <div class="badge-rukita">KINARA</div>
+                    <?php endif; ?>
+                    
+                    <?php 
+                        $status_id = ucfirst($kamar['status']);
+                        $status_en = strtolower($status_id) == 'tersedia' ? 'Available' : 'Full';
+                    ?>
+                    <div class="sisa-kamar"><span class="translatable" data-en="Status:">Status:</span> <span class="translatable" data-en="<?= $status_en ?>"><?= $status_id ?></span></div>
                 </div>
-                <?php endwhile; ?>
+                <div class="card-info">
+                    <?php $tipe_en = $kamar['tipe'] == 'ikhwan' ? "Men's Boarding" : "Women's Boarding"; ?>
+                    <div class="property-type"><i class="fas fa-<?= $kamar['tipe'] == 'ikhwan' ? 'male' : 'female'; ?>"></i> <span class="translatable" data-en="<?= $tipe_en ?>">Kost <?= ucfirst($kamar['tipe']); ?></span></div>
+                    <h3 class="property-name"><?= $kamar['nama_kamar']; ?></h3>
+                    <p class="property-location"><?= $kamar['lokasi']; ?></p>
+                    <div class="property-price"><span class="translatable" data-en="Starts from">mulai dari</span> <span>Rp <?= number_format($kamar['harga'], 0, ',', '.'); ?></span></div>
+                </div>
             </div>
+            <?php endwhile; ?>
+        </div>
 
             <button class="slide-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
         </div>
@@ -749,7 +758,7 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
     <section class="content-container promo-section">
         <div class="section-header">
-            <h2>Promo berlangsung</h2>
+            <h2 class="translatable" data-en="Ongoing Promos">Promo berlangsung</h2>
         </div>
         <div class="slider-wrapper">
             <button class="slide-btn prev" id="promoPrev"><i class="fas fa-chevron-left"></i></button>
@@ -771,11 +780,13 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
 <section class="features-section">
     <div class="container-slider"> 
-        <h2 class="section-title">Keuntungan Tinggal di Kinara</h2>
+        <h2 class="section-title translatable" data-en="Benefits of Living at Kinara">Keuntungan Tinggal di Kinara</h2>
 
         <div class="carousel-wrapper">
             <div class="features-grid" id="slider">
                 <?php
+                // CATATAN: Idealnya data dinamis dari DB (Keuntungan) juga diterjemahkan di panel admin.
+                // Untuk saat ini, kita biarkan data DB tetap, tapi judul sectionnya sudah diterjemahkan.
                 $q_fitur = mysqli_query($conn, "SELECT * FROM keuntungan ORDER BY id ASC");
                 while($f = mysqli_fetch_assoc($q_fitur)):
                 ?>
@@ -794,95 +805,82 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
 <footer class="main-footer">
     <div class="footer-container">
-        <!-- <div class="footer-column brand-section">
-            <img src="logo-rukita.png" alt="Rukita Logo" class="footer-logo">
-            <div class="app-download-area">
-                <img src="qr-code.png" alt="QR Code" class="qr-code">
-                <div class="download-buttons">
-                    <a href="#" class="btn-download">
-                        <img src="apple-icon.png" alt="App Store"> Download Aplikasi
-                    </a>
-                    <a href="#" class="btn-login">Masuk / Daftar</a>
-                </div>
-            </div>
-        </div> -->
-
         <div class="footer-column">
             <div class="footer-group">
-                <h3>Tenant</h3>
+                <h3 class="translatable" data-en="Tenant">Tenant</h3>
                 <ul>
-                    <li><a href="#">Kost</a></li>
-                    <li><a href="#">Apartemen</a></li>
-                    <li><a href="#">Community</a></li>
+                    <li><a href="#" class="translatable" data-en="Boarding House">Kost</a></li>
+                    <li><a href="#" class="translatable" data-en="Apartment">Apartemen</a></li>
+                    <li><a href="#" class="translatable" data-en="Community">Community</a></li>
                 </ul>
             </div>
             <div class="footer-group">
-                <h3>Kerjasama kinara</h3>
+                <h3 class="translatable" data-en="Kinara Partnership">Kerjasama kinara</h3>
                 <ul>
-                    <li><a href="#">Coliving</a></li>
-                    <li><a href="#">Apartemen</a></li>
-                    <li><a href="#">Build to Rent</a></li>
-                    <li><a href="#">RuFinance</a></li>
+                    <li><a href="#" class="translatable" data-en="Coliving">Coliving</a></li>
+                    <li><a href="#" class="translatable" data-en="Apartment">Apartemen</a></li>
+                    <li><a href="#" class="translatable" data-en="Build to Rent">Build to Rent</a></li>
+                    <li><a href="#" class="translatable" data-en="RuFinance">RuFinance</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-column">
             <div class="footer-group">
-                <h3>kinara For Business</h3>
+                <h3 class="translatable" data-en="Kinara For Business">kinara For Business</h3>
                 <ul>
-                    <li><a href="#">kinara For Business</a></li>
-                    <li><a href="#">Corporate Subscription</a></li>
-                    <li><a href="#">RuCollab</a></li>
+                    <li><a href="#" class="translatable" data-en="Kinara For Business">kinara For Business</a></li>
+                    <li><a href="#" class="translatable" data-en="Corporate Subscription">Corporate Subscription</a></li>
+                    <li><a href="#" class="translatable" data-en="RuCollab">RuCollab</a></li>
                 </ul>
             </div>
             <div class="footer-group">
-                <h3>Tentang kinara</h3>
+                <h3 class="translatable" data-en="About Kinara">Tentang kinara</h3>
                 <ul>
-                    <li><a href="#">Tentang Kami</a></li>
-                    <li><a href="#">Komitmen ESG Kami</a></li>
+                    <li><a href="#" class="translatable" data-en="About Us">Tentang Kami</a></li>
+                    <li><a href="#" class="translatable" data-en="Our ESG Commitment">Komitmen ESG Kami</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-column">
             <div class="footer-group">
-                <h3>Resource</h3>
+                <h3 class="translatable" data-en="Resource">Resource</h3>
                 <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Karir</a></li>
-                    <li><a href="#">Stories</a></li>
-                    <li><a href="#">Pusat Bantuan</a></li>
+                    <li><a href="#" class="translatable" data-en="FAQ">FAQ</a></li>
+                    <li><a href="#" class="translatable" data-en="Careers">Karir</a></li>
+                    <li><a href="#" class="translatable" data-en="Stories">Stories</a></li>
+                    <li><a href="#" class="translatable" data-en="Help Center">Pusat Bantuan</a></li>
                 </ul>
             </div>
             <div class="footer-group">
-                <h3>Brand Partner</h3>
+                <h3 class="translatable" data-en="Brand Partner">Brand Partner</h3>
                 <ul>
-                    <li><a href="#">Uma Living</a></li>
-                    <li><a href="#">Infokost Pro</a></li>
+                    <li><a href="#" class="translatable" data-en="Uma Living">Uma Living</a></li>
+                    <li><a href="#" class="translatable" data-en="Infokost Pro">Infokost Pro</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-column">
-            <h3>Support</h3>
+            <h3 class="translatable" data-en="Support">Support</h3>
             <ul class="support-list">
                 <li><i class="fab fa-whatsapp"></i> +62 811-900-87829</li>
                 <li><i class="far fa-envelope"></i> info@kinara.com</li>
             </ul>
             <div class="operational-hours">
-                <strong>Jam Operasional</strong>
-                <p>Senin - Jumat: 8.00 - 17.00</p>
-                <p>Sabtu - Minggu: 8.30 - 16.30</p>
+                <strong class="translatable" data-en="Operational Hours">Jam Operasional</strong>
+                <p class="translatable" data-en="Monday - Friday: 8.00 AM - 5.00 PM">Senin - Jumat: 8.00 - 17.00</p>
+                <p class="translatable" data-en="Saturday - Sunday: 8.30 AM - 4.30 PM">Sabtu - Minggu: 8.30 - 16.30</p>
             </div>
         </div>
     </div>
 
     <div class="footer-bottom">
         <div class="bottom-left">
-            <span>© 2026 kinara. All rights reserved.</span>
-            <a href="#">Syarat & Ketentuan</a>
-            <a href="#">Kebijakan Privasi</a>
+            <span class="translatable" data-en="© 2026 kinara. All rights reserved.">© 2026 kinara. All rights reserved.</span>
+            <a href="#" class="translatable" data-en="Terms & Conditions">Syarat & Ketentuan</a>
+            <a href="#" class="translatable" data-en="Privacy Policy">Kebijakan Privasi</a>
         </div>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook"></i></a>
