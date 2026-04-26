@@ -857,8 +857,8 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
             <div class="footer-group">
                 <h3 class="translatable" data-en="Brand Partner">Brand Partner</h3>
                 <ul>
-                    <li><a href="#" class="translatable" data-en="Uma Living">Uma Living</a></li>
-                    <li><a href="#" class="translatable" data-en="Infokost Pro">Infokost Pro</a></li>
+                    <li><a href="#" class="translatable" data-en="Uma Living">KIKOST BOGOR</a></li>
+                    <li><a href="#" class="translatable" data-en="Infokost Pro">Kinara Land</a></li>
                 </ul>
             </div>
         </div>
@@ -866,7 +866,7 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
         <div class="footer-column">
             <h3 class="translatable" data-en="Support">Support</h3>
             <ul class="support-list">
-                <li><i class="fab fa-whatsapp"></i> +62 811-900-87829</li>
+                <li><i class="fab fa-whatsapp"></i> +62 895-1679-2463</li>
                 <li><i class="far fa-envelope"></i> info@kinara.com</li>
             </ul>
             <div class="operational-hours">
@@ -892,7 +892,7 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
     </div>
 </footer>
 
-<a href="https://wa.me/6281190087829" class="fab-whatsapp" target="_blank">
+<a href="https://wa.me/6289516792463" class="fab-whatsapp" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Help">
 </a>
 
