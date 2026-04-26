@@ -678,8 +678,9 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
 <main class="hero-section" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/<?= $h['gambar'] ?>'); background-size: cover; background-position: center;">
     <div class="hero-content text-center">
-        <h1 class="fw-bold"><?= $h['judul'] ?></h1>
-        <p><?= $h['sub_judul'] ?></p>
+        <h1 class="fw-bold translatable" data-en="Comfortable Living, Better Life"><?= $h['judul'] ?></h1>
+        
+        <p class="translatable" data-en="Modern boarding and apartment solutions at your fingertips."><?= $h['sub_judul'] ?></p>
     </div>
 </main>
     
@@ -1096,13 +1097,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.translatable').forEach(el => {
             // Jika elemen adalah input (placeholder)
             if(el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
-                if(!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.getAttribute('placeholder'));
+                if(!el.getAttribute('data-id-text')) {
+                    el.setAttribute('data-id-text', el.getAttribute('placeholder'));
+                }
                 el.setAttribute('placeholder', lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id-text'));
             } 
             // Jika elemen adalah teks biasa
             else {
-                if(!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.innerText);
-                el.innerText = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id-text');
+                // FIX: Gunakan textContent, BUKAN innerText agar bisa membaca menu yang tersembunyi
+                if(!el.getAttribute('data-id-text')) {
+                    el.setAttribute('data-id-text', el.textContent.trim()); 
+                }
+                el.textContent = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id-text');
             }
         });
     }
