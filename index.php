@@ -356,15 +356,135 @@ $current_page = basename($_SERVER['PHP_SELF']);
     font-size: 1.2rem;
     opacity: 0.9;
 }
+
+/* =========================================
+   UI/UX RESPONSIVE LAYOUT (MOBILE FIRST)
+   ========================================= */
+
+/* 1. Global Box Sizing */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 2. Hamburger Menu (Hidden di Desktop) */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--kinara-pink, #ff385c);
+}
+
+/* 3. Filter Icon Horizontal Scroll (UX Swipe) */
+.icon-filters {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Sembunyikan scrollbar di Firefox */
+}
+.icon-filters::-webkit-scrollbar { display: none; } /* Sembunyikan di Chrome/Safari */
+.filter-item { flex: 0 0 auto; } /* Mencegah icon menyusut di layar kecil */
+
+/* 4. Native Swipe UX untuk Slider Kamar & Promo */
+.property-slider, .promo-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* Efek magnet saat di swipe */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.property-slider::-webkit-scrollbar, .promo-container::-webkit-scrollbar { display: none; }
+
+.property-card, .promo-card {
+    scroll-snap-align: center; /* Biar posisi berhenti di tengah layar HP */
+}
+
+/* 5. Features Grid (Auto menyesuaikan kolom) */
+.features-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* =========================================
+   MEDIA QUERIES (BREAKPOINTS)
+   ========================================= */
+
+/* --- TABLET & MOBILE (Maksimal 1024px) --- */
+@media (max-width: 1024px) {
+    .property-card { flex: 0 0 45%; max-width: 45%; }
+}
+
+/* --- MOBILE (Maksimal 768px) --- */
+@media (max-width: 768px) {
+    /* Navbar Dropdown Mobile */
+    .menu-toggle { display: block; }
+    
+    .nav-links, .nav-actions {
+        display: none; /* Sembunyikan default */
+        flex-direction: column;
+        width: 100%;
+        background: white;
+        position: absolute;
+        top: 70px; /* Muncul di bawah navbar */
+        left: 0;
+        padding: 20px;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        z-index: 999;
+    }
+    
+    /* Class .active ditambahkan lewat JS saat hamburger diklik */
+    .nav-links.active, .nav-actions.active {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    /* Penyesuaian Slider di Mobile */
+    .property-card { flex: 0 0 85%; max-width: 85%; } /* Card kamar lebar 85% layar */
+    .promo-card { flex: 0 0 90%; max-width: 90%; }
+    
+    /* UX: Sembunyikan tombol panah di mobile, biarkan user Swipe! */
+    .slide-btn { display: none !important; }
+
+    /* Footer Stacking */
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 20px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+/* --- SMALL MOBILE (Maksimal 576px) --- */
+@media (max-width: 576px) {
+    /* Hero Text Penyesuaian */
+    .hero-section h1 { font-size: 2.2rem; }
+    .hero-section p { font-size: 1rem; }
+    
+    /* Tab Ikhwan/Akhwat */
+    .category-tabs { flex-direction: column; width: 100%; gap: 10px; }
+    .tab-btn { width: 100%; text-align: center; }
+}
 </style>
 
 <body>
 
     <div class="overlay" id="overlay"></div>
 
-<nav class="navbar" >
+<nav class="navbar">
     <div class="nav-container">
         <div class="logo">KINARA</div>
+
+        <!-- TAMBAHAN BARU: Tombol Hamburger Menu untuk Mobile -->
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
 
         <ul class="nav-links">
             <li>
@@ -756,6 +876,24 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 </div>
 
 <script>
+// === 0. LOGIKA HAMBURGER MENU MOBILE ===
+    const mobileMenuBtn = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+    const navActions = document.querySelector('.nav-actions');
+
+    if(mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            // Memunculkan/Menyembunyikan menu
+            navLinks.classList.toggle('active');
+            navActions.classList.toggle('active');
+            
+            // Animasi icon Hamburger berubah jadi (X)
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+    }
+
 document.addEventListener('DOMContentLoaded', () => {
     const isLogin = <?= isset($_SESSION['login']) ? 'true' : 'false'; ?>;
     const loginModal = document.getElementById("loginModal");
