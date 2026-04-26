@@ -510,7 +510,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <li class="dropdown-wrapper">
                 <div class="nav-item <?= ($current_page == 'tentang_kami.php') ? 'active' : ''; ?>">
-                    Tentang Kinara <i class="fas fa-chevron-down"></i>
+                    <span class="translatable" data-en="About Kinara">Tentang Kinara</span> <i class="fas fa-chevron-down"></i>
                 </div>
                 
                 <div class="dropdown-content menu-tentang">
@@ -518,8 +518,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <div class="dropdown-item">
                             <div class="icon-box"><i class="fas fa-users"></i></div>
                             <div class="text">
-                                <strong>Tentang Kami</strong>
-                                <p>Membangun solusi hunian yang lebih mudah diakses.</p>
+                                <strong class="translatable" data-en="About Us">Tentang Kami</strong>
+                                <p class="translatable" data-en="Building more accessible housing solutions.">Membangun solusi hunian yang lebih mudah diakses.</p>
                             </div>
                         </div>
                     </a>
@@ -538,7 +538,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <li class="dropdown-wrapper">
                 <div class="nav-item <?= ($current_page == 'aturan.php' || $current_page == 'cek_kamar.php') ? 'active' : ''; ?>">
-                    Cek Unit Kamar <i class="fas fa-chevron-down"></i>
+                    <span class="translatable" data-en="Check Room Units">Cek Unit Kamar</span> <i class="fas fa-chevron-down"></i>
                 </div>
                 
                 <div class="dropdown-content menu-tentang">
@@ -565,27 +565,29 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </li>
         </ul>
 
-        <div class="nav-actions">
-            <div class="dropdown-wrapper">
-                <div class="nav-item">
-                    <img src="https://flagcdn.com/w40/id.png" class="flag-circle" alt="ID"> 
-                    <span>ID</span> <i class="fas fa-chevron-down"></i>
+        <!-- Tampilan bahasa yang sedang aktif -->
+            <div class="nav-item" id="current-lang-display">
+                <img src="https://flagcdn.com/w40/id.png" class="flag-circle" alt="ID" id="current-flag"> 
+                <span id="current-lang-code">ID</span> <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <div class="dropdown-content lang-dropdown">
+                <h4 class="dropdown-title translatable" data-en="Select Language">Pilih Bahasa</h4>
+                
+                <!-- Tombol Indonesia -->
+                <div class="dropdown-item lang-option" id="btn-lang-id" data-lang="id">
+                    <img src="https://flagcdn.com/w40/id.png" class="flag-circle">
+                    <span class="lang-text">Bahasa Indonesia</span>
+                    <i class="fas fa-check check-icon" id="check-id"></i>
                 </div>
 
-                <div class="dropdown-content lang-dropdown">
-                    <h4 class="dropdown-title">Pilih Bahasa</h4>
-                    
-                    <div class="dropdown-item lang-option active-lang">
-                        <img src="https://flagcdn.com/w40/id.png" class="flag-circle">
-                        <span class="lang-text">Bahasa Indonesia</span>
-                        <i class="fas fa-check check-icon"></i>
-                    </div>
-
-                    <div class="dropdown-item lang-option">
-                        <img src="https://flagcdn.com/w40/us.png" class="flag-circle">
-                        <span class="lang-text">Bahasa Inggris</span>
-                    </div>
+                <!-- Tombol Inggris -->
+                <div class="dropdown-item lang-option" id="btn-lang-en" data-lang="en">
+                    <img src="https://flagcdn.com/w40/us.png" class="flag-circle">
+                    <span class="lang-text">English</span>
+                    <i class="fas fa-check check-icon" id="check-en" style="display:none;"></i>
                 </div>
+            </div>
             </div>
 
             <!-- LOGIN BUTTON -->
@@ -601,9 +603,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 <?php else: ?>
-    <button class="login-btn" id="openLogin">
-        <i class="far fa-user"></i> Masuk / Daftar
-    </button>
+<button class="login-btn" id="openLogin">
+    <i class="far fa-user"></i> <span class="translatable" data-en="Login / Register">Masuk / Daftar</span>
+</button>
 <?php endif; ?>
 
         </div>
@@ -679,8 +681,12 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 <section class="content-container">
         <div class="filter-section">
             <div class="category-tabs">
-                <button class="tab-btn active" data-target="ikhwan"><i class="fas fa-male"></i> Kost Ikhwan</button>
-                <button class="tab-btn" data-target="akhwat"><i class="fas fa-female"></i> Kost Akhwat</button>
+                <button class="tab-btn active" data-target="ikhwan">
+                    <i class="fas fa-male"></i> <span class="translatable" data-en="Men's Boarding">Kost Ikhwan</span>
+                </button>
+                <button class="tab-btn" data-target="akhwat">
+                    <i class="fas fa-female"></i> <span class="translatable" data-en="Women's Boarding">Kost Akhwat</span>
+                </button>
             </div>
         </div>
         
@@ -1055,6 +1061,59 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    // === 6. LOGIKA MULTI-BAHASA (BILINGUAL) ===
+    const btnLangId = document.getElementById('btn-lang-id');
+    const btnLangEn = document.getElementById('btn-lang-en');
+    const currentFlag = document.getElementById('current-flag');
+    const currentLangCode = document.getElementById('current-lang-code');
+    const checkId = document.getElementById('check-id');
+    const checkEn = document.getElementById('check-en');
+
+    function setLanguage(lang) {
+        // 1. Simpan pilihan user di browser (agar tidak hilang saat refresh)
+        localStorage.setItem('kinara_lang', lang);
+
+        // 2. Ubah Tampilan Dropdown
+        if (lang === 'en') {
+            currentFlag.src = 'https://flagcdn.com/w40/us.png';
+            currentLangCode.innerText = 'EN';
+            checkId.style.display = 'none';
+            checkEn.style.display = 'inline-block';
+            btnLangEn.classList.add('active-lang');
+            btnLangId.classList.remove('active-lang');
+        } else {
+            currentFlag.src = 'https://flagcdn.com/w40/id.png';
+            currentLangCode.innerText = 'ID';
+            checkEn.style.display = 'none';
+            checkId.style.display = 'inline-block';
+            btnLangId.classList.add('active-lang');
+            btnLangEn.classList.remove('active-lang');
+        }
+
+        // 3. Eksekusi Terjemahan pada semua elemen yang memiliki class 'translatable'
+        document.querySelectorAll('.translatable').forEach(el => {
+            // Jika elemen adalah input (placeholder)
+            if(el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                if(!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.getAttribute('placeholder'));
+                el.setAttribute('placeholder', lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id-text'));
+            } 
+            // Jika elemen adalah teks biasa
+            else {
+                if(!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.innerText);
+                el.innerText = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-id-text');
+            }
+        });
+    }
+
+    // Event Listener ketika tombol bahasa diklik
+    if(btnLangId) btnLangId.addEventListener('click', () => setLanguage('id'));
+    if(btnLangEn) btnLangEn.addEventListener('click', () => setLanguage('en'));
+
+    // Otomatis cek bahasa saat web pertama kali dibuka
+    const savedLang = localStorage.getItem('kinara_lang') || 'id';
+    setLanguage(savedLang);
+
 });
 </script>
 </body>
