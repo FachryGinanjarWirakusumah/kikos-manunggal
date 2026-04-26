@@ -19,7 +19,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </head>
 
 <style>
-    /* MODAL BACKGROUND */
 /* MODAL BACKGROUND */
 .login-modal {
     display: none;
@@ -436,11 +435,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         width: 100%;
         
         /* FIX UX 1: Efek Kaca (Glassmorphism) - Semi transparan + Blur */
-        background: rgba(255, 255, 255, 0.90) !important;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Garis batas tipis */
-        
+        background: rgba(255, 255, 255, 0.65) !important; /* Diturunkan jadi 0.65 agar lebih tembus pandang */
+        backdrop-filter: blur(12px) !important; /* Tambahkan !important agar tidak tertimpa CSS lain */
+        -webkit-backdrop-filter: blur(12px) !important; /* Khusus untuk pengguna iPhone/Safari */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important; /* Border putih tipis ciri khas efek kaca */
+
         flex-direction: column;
         padding: 20px;
         box-shadow: 0 15px 25px rgba(0,0,0,0.1);
@@ -897,7 +896,6 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
 // === 0. LOGIKA HAMBURGER MENU MOBILE ===
 const mobileMenuBtn = document.getElementById('mobile-menu');
 const navMenu = document.getElementById('navMenu');
@@ -1057,8 +1055,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-});
-
 });
 </script>
 </body>
