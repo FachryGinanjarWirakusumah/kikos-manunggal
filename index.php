@@ -357,6 +357,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
     opacity: 0.9;
 }
 
+/* Wrapper Navbar untuk mengatur letak di Desktop */
+.nav-menu-wrapper {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* =========================================
    UI/UX RESPONSIVE LAYOUT (MOBILE FIRST)
    ========================================= */
@@ -420,45 +428,54 @@ $current_page = basename($_SERVER['PHP_SELF']);
     /* Navbar Dropdown Mobile */
     .menu-toggle { display: block; }
     
-    .nav-links, .nav-actions {
-        display: none; /* Sembunyikan default */
-        flex-direction: column;
+    /* Atur Wrapper Utama agar turun ke bawah navbar */
+    .nav-menu-wrapper {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
         width: 100%;
         background: white;
-        position: absolute;
-        top: 70px; /* Muncul di bawah navbar */
-        left: 0;
+        flex-direction: column;
         padding: 20px;
         box-shadow: 0 10px 15px rgba(0,0,0,0.05);
         z-index: 999;
-    }
-    
-    /* Class .active ditambahkan lewat JS saat hamburger diklik */
-    .nav-links.active, .nav-actions.active {
-        display: flex;
+        gap: 20px;
         align-items: flex-start;
-        gap: 15px;
     }
-
-    /* Penyesuaian Slider di Mobile */
-    .property-card { flex: 0 0 85%; max-width: 85%; } /* Card kamar lebar 85% layar */
-    .promo-card { flex: 0 0 90%; max-width: 90%; }
     
-    /* UX: Sembunyikan tombol panah di mobile, biarkan user Swipe! */
-    .slide-btn { display: none !important; }
+    /* Muncul saat hamburger diklik */
+    .nav-menu-wrapper.active { display: flex; }
 
-    /* Footer Stacking */
-    .footer-container {
-        display: flex;
+    /* Susun link & aksi menurun */
+    .nav-links, .nav-actions {
         flex-direction: column;
-        gap: 30px;
-        padding: 20px;
-    }
-    .footer-bottom {
-        flex-direction: column;
-        text-align: center;
+        width: 100%;
         gap: 15px;
+        align-items: flex-start;
     }
+
+    /* FIX: Ubah Dropdown menjadi Akordion (Mencegah teks terpotong) */
+    .dropdown-content {
+        position: static !important; /* Hilangkan sifat melayang di HP */
+        box-shadow: none !important;
+        padding-left: 15px;
+        margin-top: 10px;
+        display: none;
+        border-left: 2px solid var(--kinara-pink, #ff385c); /* Garis aksen kiri */
+    }
+
+    /* Tampilkan dropdown saat diklik */
+    .dropdown-wrapper.active .dropdown-content {
+        display: block !important;
+    }
+
+    /* Penyesuaian Slider & Footer di Mobile (TETAP SAMA SEPERTI SEBELUMNYA) */
+    .property-card { flex: 0 0 85%; max-width: 85%; } 
+    .promo-card { flex: 0 0 90%; max-width: 90%; }
+    .slide-btn { display: none !important; }
+    .footer-container { display: flex; flex-direction: column; gap: 30px; padding: 20px; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 15px; }
 }
 
 /* --- SMALL MOBILE (Maksimal 576px) --- */
@@ -486,6 +503,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <i class="fas fa-bars"></i>
         </div>
 
+        <div class="nav-menu-wrapper" id="navMenu">
         <ul class="nav-links">
             <li>
                 <a href="index.php" class="<?= ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
@@ -877,22 +895,20 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 
 <script>
 // === 0. LOGIKA HAMBURGER MENU MOBILE ===
-    const mobileMenuBtn = document.getElementById('mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
-    const navActions = document.querySelector('.nav-actions');
+const mobileMenuBtn = document.getElementById('mobile-menu');
+const navMenu = document.getElementById('navMenu'); // Mengarah ke bungkusannya
 
-    if(mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            // Memunculkan/Menyembunyikan menu
-            navLinks.classList.toggle('active');
-            navActions.classList.toggle('active');
-            
-            // Animasi icon Hamburger berubah jadi (X)
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-    }
+if(mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        // Toggle menu utama
+        navMenu.classList.toggle('active');
+        
+        // Animasi icon Hamburger berubah jadi (X)
+        const icon = mobileMenuBtn.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const isLogin = <?= isset($_SESSION['login']) ? 'true' : 'false'; ?>;
