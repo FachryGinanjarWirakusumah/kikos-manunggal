@@ -428,54 +428,54 @@ $current_page = basename($_SERVER['PHP_SELF']);
     /* Navbar Dropdown Mobile */
     .menu-toggle { display: block; }
     
-    /* Atur Wrapper Utama agar turun ke bawah navbar */
     .nav-menu-wrapper {
         display: none;
         position: absolute;
         top: 70px;
         left: 0;
         width: 100%;
-        background: white;
+        
+        /* FIX UX 1: Efek Kaca (Glassmorphism) - Semi transparan + Blur */
+        background: rgba(255, 255, 255, 0.90) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Garis batas tipis */
+        
         flex-direction: column;
         padding: 20px;
-        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 15px 25px rgba(0,0,0,0.1);
         z-index: 999;
         gap: 20px;
         align-items: flex-start;
     }
     
-    /* Muncul saat hamburger diklik */
     .nav-menu-wrapper.active { display: flex; }
 
-    /* Susun link & aksi menurun */
-    .nav-links, .nav-actions {
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-        align-items: flex-start;
-    }
-
-    /* FIX: Ubah Dropdown menjadi Akordion (Mencegah teks terpotong) */
-    .dropdown-content {
-        position: static !important; /* Hilangkan sifat melayang di HP */
-        box-shadow: none !important;
-        padding-left: 15px;
-        margin-top: 10px;
-        display: none;
-        border-left: 2px solid var(--kinara-pink, #ff385c); /* Garis aksen kiri */
-    }
-
-    /* Tampilkan dropdown saat diklik */
-    .dropdown-wrapper.active .dropdown-content {
-        display: block !important;
-    }
-
-    /* Penyesuaian Slider & Footer di Mobile (TETAP SAMA SEPERTI SEBELUMNYA) */
+    /* Lanjutan CSS nav-links dan slider dibiarkan sama... */
+    .nav-links, .nav-actions { flex-direction: column; width: 100%; gap: 15px; align-items: flex-start; }
+    .dropdown-content { position: static !important; box-shadow: none !important; padding-left: 15px; margin-top: 10px; display: none; border-left: 2px solid var(--kinara-pink, #ff385c); }
+    .dropdown-wrapper.active .dropdown-content { display: block !important; }
     .property-card { flex: 0 0 85%; max-width: 85%; } 
     .promo-card { flex: 0 0 90%; max-width: 90%; }
     .slide-btn { display: none !important; }
     .footer-container { display: flex; flex-direction: column; gap: 30px; padding: 20px; }
     .footer-bottom { flex-direction: column; text-align: center; gap: 15px; }
+}
+
+/* FIX UX 2: Overlay Background Blur saat menu terbuka */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 70px; /* Mulai dari bawah navbar */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.5); /* Gelap 50% */
+    backdrop-filter: blur(4px); /* Blur konten di belakangnya */
+    z-index: 998; /* Di bawah menu, di atas konten */
+}
+.mobile-overlay.active {
+    display: block;
 }
 
 /* --- SMALL MOBILE (Maksimal 576px) --- */
@@ -610,6 +610,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </nav>
+
+<!-- TAMBAHAN BARU: Latar belakang blur saat menu HP dibuka -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
 
 <!-- LOGIN MODAL -->
 <div class="login-modal" id="loginModal">
@@ -894,14 +897,18 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
 // === 0. LOGIKA HAMBURGER MENU MOBILE ===
 const mobileMenuBtn = document.getElementById('mobile-menu');
-const navMenu = document.getElementById('navMenu'); // Mengarah ke bungkusannya
+const navMenu = document.getElementById('navMenu');
+const mobileOverlay = document.getElementById('mobileOverlay');
 
 if(mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
-        // Toggle menu utama
+    mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Mencegah klik menyebar
+        
         navMenu.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
         
         // Animasi icon Hamburger berubah jadi (X)
         const icon = mobileMenuBtn.querySelector('i');
@@ -909,6 +916,23 @@ if(mobileMenuBtn) {
         icon.classList.toggle('fa-times');
     });
 }
+
+// FIX UX 3: Tutup menu saat klik sembarang area (di luar menu)
+document.addEventListener('click', (e) => {
+    // Jika menu sedang terbuka, dan yang diklik BUKAN bagian dari menu
+    if (navMenu && navMenu.classList.contains('active')) {
+        if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            // Tutup Menu & Overlay
+            navMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            
+            // Kembalikan icon X jadi Hamburger
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const isLogin = <?= isset($_SESSION['login']) ? 'true' : 'false'; ?>;
@@ -1033,6 +1057,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+});
+
 });
 </script>
 </body>
