@@ -435,7 +435,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         width: 100%;
         
         /* FIX UX 1: Efek Kaca (Glassmorphism) - Semi transparan + Blur */
-        background: rgba(255, 255, 255, 0.65) !important; /* Diturunkan jadi 0.65 agar lebih tembus pandang */
+        background: rgba(255, 255, 255, 0.96) !important; /* Diturunkan jadi 0.65 agar lebih tembus pandang */
         backdrop-filter: blur(12px) !important; /* Tambahkan !important agar tidak tertimpa CSS lain */
         -webkit-backdrop-filter: blur(12px) !important; /* Khusus untuk pengguna iPhone/Safari */
         border-bottom: 1px solid rgb(255, 255, 255) !important; /* Border putih tipis ciri khas efek kaca */
