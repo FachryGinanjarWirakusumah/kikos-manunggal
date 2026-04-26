@@ -565,48 +565,51 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </li>
         </ul>
 
-        <!-- Tampilan bahasa yang sedang aktif -->
-            <div class="nav-item" id="current-lang-display">
-                <img src="https://flagcdn.com/w40/id.png" class="flag-circle" alt="ID" id="current-flag"> 
-                <span id="current-lang-code">ID</span> <i class="fas fa-chevron-down"></i>
-            </div>
-
-            <div class="dropdown-content lang-dropdown">
-                <h4 class="dropdown-title translatable" data-en="Select Language">Pilih Bahasa</h4>
-                
-                <!-- Tombol Indonesia -->
-                <div class="dropdown-item lang-option" id="btn-lang-id" data-lang="id">
-                    <img src="https://flagcdn.com/w40/id.png" class="flag-circle">
-                    <span class="lang-text">Bahasa Indonesia</span>
-                    <i class="fas fa-check check-icon" id="check-id"></i>
+        <div class="nav-actions">
+            <!-- === DROPDOWN BAHASA (SUDAH DIPERBAIKI) === -->
+            <div class="dropdown-wrapper">
+                <!-- Tampilan bahasa yang sedang aktif -->
+                <div class="nav-item" id="current-lang-display">
+                    <img src="https://flagcdn.com/w40/id.png" class="flag-circle" alt="ID" id="current-flag"> 
+                    <span id="current-lang-code">ID</span> <i class="fas fa-chevron-down"></i>
                 </div>
 
-                <!-- Tombol Inggris -->
-                <div class="dropdown-item lang-option" id="btn-lang-en" data-lang="en">
-                    <img src="https://flagcdn.com/w40/us.png" class="flag-circle">
-                    <span class="lang-text">English</span>
-                    <i class="fas fa-check check-icon" id="check-en" style="display:none;"></i>
+                <div class="dropdown-content lang-dropdown">
+                    <h4 class="dropdown-title translatable" data-en="Select Language">Pilih Bahasa</h4>
+                    
+                    <!-- Tombol Indonesia -->
+                    <div class="dropdown-item lang-option active-lang" id="btn-lang-id" data-lang="id">
+                        <img src="https://flagcdn.com/w40/id.png" class="flag-circle">
+                        <span class="lang-text">Bahasa Indonesia</span>
+                        <i class="fas fa-check check-icon" id="check-id"></i>
+                    </div>
+
+                    <!-- Tombol Inggris -->
+                    <div class="dropdown-item lang-option" id="btn-lang-en" data-lang="en">
+                        <img src="https://flagcdn.com/w40/us.png" class="flag-circle">
+                        <span class="lang-text">English</span>
+                        <i class="fas fa-check check-icon" id="check-en" style="display:none;"></i>
+                    </div>
                 </div>
             </div>
-            </div>
 
-            <!-- LOGIN BUTTON -->
-<?php if(isset($_SESSION['login'])): ?>
-    <div class="dropdown-wrapper">
-        <button class="login-btn">
-            <i class="far fa-user"></i> Halo, <?= $_SESSION['nama']; ?>
-        </button>
-        <div class="dropdown-content">
-            <a href="logout.php" style="color: red; padding: 10px; display: block; text-decoration: none;">
-                <i class="fas fa-sign-out-alt"></i> Keluar
-            </a>
-        </div>
-    </div>
-<?php else: ?>
-<button class="login-btn" id="openLogin">
-    <i class="far fa-user"></i> <span class="translatable" data-en="Login / Register">Masuk / Daftar</span>
-</button>
-<?php endif; ?>
+            <!-- === LOGIN BUTTON === -->
+            <?php if(isset($_SESSION['login'])): ?>
+                <div class="dropdown-wrapper">
+                    <button class="login-btn">
+                        <i class="far fa-user"></i> Halo, <?= $_SESSION['nama']; ?>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="logout.php" style="color: red; padding: 10px; display: block; text-decoration: none;">
+                            <i class="fas fa-sign-out-alt"></i> <span class="translatable" data-en="Logout">Keluar</span>
+                        </a>
+                    </div>
+                </div>
+            <?php else: ?>
+                <button class="login-btn" id="openLogin">
+                    <i class="far fa-user"></i> <span class="translatable" data-en="Login / Register">Masuk / Daftar</span>
+                </button>
+            <?php endif; ?>
 
         </div>
     </div>
@@ -1062,7 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // === 6. LOGIKA MULTI-BAHASA (BILINGUAL) ===
+// === 6. LOGIKA MULTI-BAHASA (BILINGUAL) ===
     const btnLangId = document.getElementById('btn-lang-id');
     const btnLangEn = document.getElementById('btn-lang-en');
     const currentFlag = document.getElementById('current-flag');
