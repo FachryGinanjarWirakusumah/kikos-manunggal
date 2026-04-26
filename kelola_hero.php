@@ -151,58 +151,58 @@ if (isset($_POST['update_hero'])) {
         </h4>
     </div>
 
-    <span class="nav-group-label">Main Menu</span>
+    <span class="nav-group-label translatable" data-en="Main Menu">Main Menu</span>
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="admin_dashboard.php" class="nav-link">
-                <i class="fas fa-th-large me-2"></i> Dashboard
+                <i class="fas fa-th-large me-2"></i> <span class="translatable" data-en="Dashboard">Dashboard</span>
             </a>
         </li>
     </ul>
 
-    <span class="nav-group-label">Manajemen Kost</span>
+    <span class="nav-group-label translatable" data-en="Boarding Management">Manajemen Kost</span>
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="kelola_kamar.php" class="nav-link">
-                <i class="fas fa-bed me-2"></i> Kelola Kamar
+                <i class="fas fa-bed me-2"></i> <span class="translatable" data-en="Manage Rooms">Kelola Kamar</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="data_penyewa.php" class="nav-link">
-                <i class="fas fa-users me-2"></i> Data Pengguna
+                <i class="fas fa-users me-2"></i> <span class="translatable" data-en="User Data">Data Pengguna</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="pembayaran.php" class="nav-link">
-                <i class="fas fa-wallet me-2"></i> Pembayaran
+                <i class="fas fa-wallet me-2"></i> <span class="translatable" data-en="Payments">Pembayaran</span>
             </a>
         </li>
     </ul>
 
-<span class="nav-group-label">Tampilan User</span>
+<span class="nav-group-label translatable" data-en="User Interface">Tampilan User</span>
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="kelola_promo.php" class="nav-link">
-                <i class="fas fa-percentage me-2"></i> Promo
+                <i class="fas fa-percentage me-2"></i> <span class="translatable" data-en="Promos">Promo</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="kelola_keuntungan.php" class="nav-link">
-                <i class="fas fa-star me-2"></i> Keuntungan
+                <i class="fas fa-star me-2"></i> <span class="translatable" data-en="Benefits">Keuntungan</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="kelola_hero.php" class="nav-link active">
-                <i class="fas fa-star me-2"></i> Banner
+                <i class="fas fa-image me-2"></i> <span class="translatable" data-en="Banners">Banner</span>
             </a>
         </li>
     </ul>
 
-    <span class="nav-group-label">Laporan</span>
+    <span class="nav-group-label translatable" data-en="Reports">Laporan</span>
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="laporan.php" class="nav-link">
-                <i class="fas fa-chart-line me-2"></i> Statistik Booking
+                <i class="fas fa-chart-line me-2"></i> <span class="translatable" data-en="Booking Stats">Statistik Booking</span>
             </a>
         </li>
     </ul>
@@ -212,68 +212,100 @@ if (isset($_POST['update_hero'])) {
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="javascript:void(0)" class="nav-link text-danger" id="btnLogout">
-                <i class="fas fa-power-off me-2"></i> Logout
+                <i class="fas fa-power-off me-2"></i> <span class="translatable" data-en="Logout">Logout</span>
             </a>
         </li>
     </ul>
 </div>
+
 <div class="main-content">
-    <h3 class="fw-bold mb-4">Pengaturan Hero Banner</h3>
+    <h3 class="fw-bold mb-4 translatable" data-en="Hero Banner Settings">Pengaturan Hero Banner</h3>
 
     <div class="row">
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 p-4">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label class="fw-bold small mb-2">Judul Utama (Heading)</label>
+                        <label class="fw-bold small mb-2 translatable" data-en="Main Title (Heading)">Judul Utama (Heading)</label>
                         <input type="text" name="judul" class="form-control" value="<?= $hero['judul'] ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="fw-bold small mb-2">Sub-Judul (Deskripsi)</label>
+                        <label class="fw-bold small mb-2 translatable" data-en="Sub-Title (Description)">Sub-Judul (Deskripsi)</label>
                         <textarea name="sub_judul" class="form-control" rows="3" required><?= $hero['sub_judul'] ?></textarea>
                     </div>
                     <div class="mb-4">
-                        <label class="fw-bold small mb-2">Ganti Background Gambar</label>
+                        <label class="fw-bold small mb-2 translatable" data-en="Change Background Image">Ganti Background Gambar</label>
                         <input type="file" name="gambar" class="form-control" accept="image/*">
-                        <div class="form-text text-muted mt-2">Rekomendasi ukuran: 1920 x 1080 px agar tidak pecah.</div>
+                        <div class="form-text text-muted mt-2 translatable" data-en="Recommended size: 1920 x 1080 px to avoid pixelation.">Rekomendasi ukuran: 1920 x 1080 px agar tidak pecah.</div>
                     </div>
                     <button type="submit" name="update_hero" class="btn btn-danger px-4 fw-bold">
-                        <i class="fas fa-save me-2"></i> Simpan Perubahan
+                        <i class="fas fa-save me-2"></i> <span class="translatable" data-en="Save Changes">Simpan Perubahan</span>
                     </button>
                 </form>
             </div>
         </div>
         <div class="col-md-4">
-            <h6 class="fw-bold mb-3">Preview Saat Ini:</h6>
+            <h6 class="fw-bold mb-3 translatable" data-en="Current Preview:">Preview Saat Ini:</h6>
             <img src="img/<?= $hero['gambar'] ?>" class="preview-hero">
             <div class="alert alert-info border-0 small">
-                <i class="fas fa-info-circle me-2"></i> Gambar ini adalah latar belakang besar yang muncul di halaman depan.
+                <i class="fas fa-info-circle me-2"></i> <span class="translatable" data-en="This is the large background image that appears on the front page.">Gambar ini adalah latar belakang besar yang muncul di halaman depan.</span>
             </div>
         </div>
     </div>
 </div>
 
 <?php if(isset($_GET['msg']) && $_GET['msg'] == 'success'): ?>
-<script>Swal.fire('Berhasil!', 'Hero banner telah diperbarui.', 'success');</script>
+<script>
+    // Translasi alert SweetAlert
+    const isEn = localStorage.getItem('kinara_lang') === 'en';
+    const titleText = isEn ? 'Success!' : 'Berhasil!';
+    const msgText = isEn ? 'Hero banner has been updated.' : 'Hero banner telah diperbarui.';
+    Swal.fire(titleText, msgText, 'success');
+</script>
 <?php endif; ?>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // === 1. Logika Terjemahan Bahasa (Membaca dari localStorage) ===
+    const savedLang = localStorage.getItem('kinara_lang') || 'id';
+    
+    if (savedLang === 'en') {
+        document.querySelectorAll('.translatable').forEach(el => {
+            // Cek jika elemen itu input placeholder
+            if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                if (!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.getAttribute('placeholder'));
+                el.setAttribute('placeholder', el.getAttribute('data-en'));
+            } 
+            // Cek jika elemen itu teks HTML biasa
+            else {
+                if (!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.innerText);
+                el.innerText = el.getAttribute('data-en');
+            }
+        });
+    }
+
+    // === 2. Logika Konfirmasi Logout Admin (Bilingual) ===
     document.getElementById('btnLogout')?.addEventListener('click', function() {
+        const isEnglish = localStorage.getItem('kinara_lang') === 'en';
+        
         Swal.fire({
-            title: 'Keluar dari Sistem?',
-            text: "Anda harus login kembali untuk mengelola data.",
+            title: isEnglish ? 'Log out of the system?' : 'Keluar dari Sistem?',
+            text: isEnglish ? 'You must log in again to manage data.' : 'Anda harus login kembali untuk mengelola data.',
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#ff385c',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, Keluar!',
-            cancelButtonText: 'Batal'
+            confirmButtonText: isEnglish ? 'Yes, Log out!' : 'Ya, Keluar!',
+            cancelButtonText: isEnglish ? 'Cancel' : 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'logout.php';
             }
         });
     });
+
+});
 </script>
 </body>
 </html>
