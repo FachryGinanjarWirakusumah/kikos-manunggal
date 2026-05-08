@@ -599,13 +599,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Help">
 </a>
 
-
-<div id="imageModal" class="img-zoom-modal">
-    <span class="img-close">&times;</span>
-    <img class="img-modal-content" id="imgFull">
-    <div id="imgCaption"></div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
