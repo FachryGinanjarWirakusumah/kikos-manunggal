@@ -52,139 +52,51 @@ if (isset($_POST['update_hero'])) {
     <style>
         :root { --primary-color: #ff385c; --sidebar-bg: #212529; }
         body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-/* UPDATE SIDEBAR AGAR BISA DI-SCROLL */
-.sidebar { 
-    height: 100vh; 
-    width: 250px; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    background-color: var(--sidebar-bg); 
-    padding-top: 20px; 
-    padding-bottom: 20px; /* Tambah padding bawah agar menu terakhir tidak mepet */
-    color: white; 
-    
-    /* INI KUNCINYA */
-    overflow-y: auto; 
-    scrollbar-width: thin; /* Untuk Firefox */
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
-}
 
-/* CUSTOM SCROLLBAR UNTUK CHROME, SAFARI, & EDGE (Agar terlihat modern) */
-.sidebar::-webkit-scrollbar {
-    width: 5px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-        .sidebar .nav-link {
-            color: rgba(255,255,255,0.7);
-            padding: 12px 20px;
-            margin: 4px 15px;
-            border-radius: 8px;
+        /* UPDATE SIDEBAR AGAR BISA DI-SCROLL */
+        .sidebar { 
+            height: 100vh; 
+            width: 250px; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            background-color: var(--sidebar-bg); 
+            padding-top: 20px; 
+            padding-bottom: 20px; 
+            color: white; 
+            overflow-y: auto; 
+            scrollbar-width: thin; 
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
         }
 
-        /* Update Sidebar Styling */
-        .sidebar .nav-group-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #6c757d;
-            font-weight: 700;
-            margin: 20px 25px 10px;
-            display: block;
-        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
-        .sidebar .nav-link {
-            color: #adb5bd; /* Warna default abu-abu terang */
-            padding: 12px 20px;
-            margin: 2px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
+        .sidebar .nav-link { color: rgba(255,255,255,0.7); padding: 12px 20px; margin: 4px 15px; border-radius: 8px; }
 
-        .sidebar .nav-link:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-
-        .sidebar .nav-link.active {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3);
-        }
-
-        .sidebar hr {
-            border-color: rgba(255,255,255,0.1);
-            margin: 20px 15px;
-        }
+        .sidebar .nav-group-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #6c757d; font-weight: 700; margin: 20px 25px 10px; display: block; }
+        .sidebar .nav-link { color: #adb5bd; padding: 12px 20px; margin: 2px 15px; border-radius: 10px; font-size: 14px; font-weight: 500; transition: all 0.3s; }
+        .sidebar .nav-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .sidebar .nav-link.active { background: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3); }
+        .sidebar hr { border-color: rgba(255,255,255,0.1); margin: 20px 15px; }
         
-        /* Main Content Area */
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-        }
-        
-        .stat-card {
-            border: none;
-            border-radius: 15px;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .stat-card:hover { transform: translateY(-5px); }
-        
-        .navbar-admin {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            padding: 15px 25px;
-            border-radius: 12px;
-        }
+        .main-content { margin-left: 250px; padding: 30px; }
         .preview-hero { width: 100%; max-height: 300px; object-fit: cover; border-radius: 15px; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
 
-        /* =========================================
-           UI/UX RESPONSIVE ADMIN (MOBILE FIRST)
-           ========================================= */
-        
-        .sidebar-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
-        }
-
-        .btn-toggle-sidebar {
-            display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0;
-        }
-
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998; }
+        .btn-toggle-sidebar { display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0; }
         .sidebar { z-index: 999; transition: transform 0.3s ease-in-out; }
 
         @media (max-width: 768px) {
-            /* Sembunyikan Sidebar ke Kiri */
             .sidebar { transform: translateX(-100%); }
             .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
             .sidebar-overlay.show { display: block; }
-
-            /* Konten Utama Penuhi Layar */
             .main-content { margin-left: 0 !important; padding: 15px; }
-            
-            /* Tampilkan Tombol Hamburger & Rapikan Header */
             .btn-toggle-sidebar { display: block; }
             .header-admin-mobile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
             .header-admin-mobile h3 { font-size: 22px; margin-bottom: 0 !important; }
-
-            /* Sesuaikan tinggi preview gambar di HP */
             .preview-hero { max-height: 200px; }
         }
     </style>
@@ -271,7 +183,7 @@ if (isset($_POST['update_hero'])) {
     <div class="row">
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 p-4">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="formHero">
                     <input type="hidden" name="update_hero" value="1">
                     
                     <div class="mb-3">
@@ -284,10 +196,13 @@ if (isset($_POST['update_hero'])) {
                     </div>
                     <div class="mb-4">
                         <label class="fw-bold small mb-2 translatable" data-en="Change Background Image">Ganti Background Gambar</label>
-                        <input type="file" name="gambar" class="form-control" accept="image/*">
-                        <div class="form-text text-muted mt-2 translatable" data-en="Recommended size: 1920 x 1080 px to avoid pixelation.">Rekomendasi ukuran: 1920 x 1080 px agar tidak pecah.</div>
+                        <input type="file" name="gambar" id="inputGambar" class="form-control" accept="image/*">
+                        <div class="form-text text-muted mt-2">
+                            <span class="translatable" data-en="Recommended size: 1920 x 1080 px to avoid pixelation.">Rekomendasi ukuran: 1920 x 1080 px agar tidak pecah.</span> 
+                            <strong class="text-danger translatable" data-en="(Max: 5MB)">(Maksimal: 5MB)</strong>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-danger px-4 fw-bold">
+                    <button type="submit" id="btnSubmit" class="btn btn-danger px-4 fw-bold">
                         <i class="fas fa-save me-2"></i> <span class="translatable" data-en="Save Changes">Simpan Perubahan</span>
                     </button>
                 </form>
@@ -316,17 +231,15 @@ if (isset($_POST['update_hero'])) {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     
-    // === 1. Logika Terjemahan Bahasa (Membaca dari localStorage) ===
     const savedLang = localStorage.getItem('kinara_lang') || 'id';
     
+    // === 1. Logika Terjemahan Bahasa ===
     if (savedLang === 'en') {
         document.querySelectorAll('.translatable').forEach(el => {
-            // Cek jika elemen itu input placeholder
             if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
                 if (!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.getAttribute('placeholder'));
                 el.setAttribute('placeholder', el.getAttribute('data-en'));
             } 
-            // Cek jika elemen itu teks HTML biasa
             else {
                 if (!el.getAttribute('data-id-text')) el.setAttribute('data-id-text', el.innerText);
                 el.innerText = el.getAttribute('data-en');
@@ -334,7 +247,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === 2. Logika Konfirmasi Logout Admin (Bilingual) ===
+    // === 2. INTERCEPT FORM UNTUK VALIDASI UKURAN DAN LOADING ANIMATION ===
+    const formHero = document.getElementById('formHero');
+    const inputGambar = document.getElementById('inputGambar');
+
+    formHero.addEventListener('submit', function(e) {
+        // Cek ukuran file jika ada file yang dipilih
+        if (inputGambar.files.length > 0) {
+            const fileSize = inputGambar.files[0].size / 1024 / 1024; // Mengubah byte menjadi MB
+            
+            // Batas maksimal ukuran file (5 MB)
+            if (fileSize > 5) {
+                e.preventDefault(); // Hentikan proses form
+                Swal.fire({
+                    icon: 'error',
+                    title: savedLang === 'en' ? 'File Too Large!' : 'File Terlalu Besar!',
+                    text: savedLang === 'en' ? 'Maximum image size is 5MB.' : 'Ukuran maksimal gambar adalah 5MB.',
+                    confirmButtonColor: '#ff385c'
+                });
+                return; // Keluar dari fungsi
+            }
+        }
+
+        // Jika ukuran aman / tidak ganti gambar, munculkan animasi loading
+        Swal.fire({
+            title: savedLang === 'en' ? 'Saving Data...' : 'Menyimpan Data...',
+            html: savedLang === 'en' ? 'Please wait a moment while the image is being uploaded.' : 'Mohon tunggu sebentar selagi gambar diunggah.',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Form akan otomatis melanjutkan submit data ke server di belakang layar
+    });
+
+    // === 3. Logika Konfirmasi Logout Admin ===
     document.getElementById('btnLogout')?.addEventListener('click', function() {
         const isEnglish = localStorage.getItem('kinara_lang') === 'en';
         
