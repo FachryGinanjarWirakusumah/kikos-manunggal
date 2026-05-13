@@ -1,0 +1,116 @@
+/* =========================================
+   GLOBAL & VARIABEL
+   ========================================= */
+:root {
+    --primary-color: #ff385c;
+    --primary-hover: #e31c5f;
+    --sidebar-bg: #212529;
+    --kinara-teal: #1abc9c;
+    --kinara-blue: #3498db;
+    --kinara-yellow: #f1c40f;
+}
+body { font-family: 'Inter', sans-serif; background-color: #f4f7f6; color: #333; }
+
+/* =========================================
+   SIDEBAR STYLING
+   ========================================= */
+.sidebar { 
+    height: 100vh; 
+    width: 250px; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    background-color: var(--sidebar-bg); 
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    color: white; 
+    overflow-y: auto; 
+    scrollbar-width: thin; 
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+    z-index: 1000;
+}
+
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+.sidebar .nav-group-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: #6c757d; font-weight: 700; margin: 20px 25px 10px; display: block;
+}
+
+.sidebar .nav-link {
+    color: #adb5bd; padding: 12px 20px; margin: 2px 15px;
+    border-radius: 10px; font-size: 14px; font-weight: 500; transition: all 0.3s;
+}
+.sidebar .nav-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+.sidebar .nav-link.active {
+    background: var(--primary-color); color: white;
+    box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3);
+}
+.sidebar hr { border-color: rgba(255,255,255,0.1); margin: 20px 15px; }
+
+/* =========================================
+   MAIN CONTENT & TOPBAR
+   ========================================= */
+.main-content { margin-left: 250px; padding: 30px; }
+
+.navbar-admin {
+    background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+    margin-bottom: 30px; padding: 15px 25px; border-radius: 16px; border: 1px solid #eaeaea;
+}
+
+/* =========================================
+   DASHBOARD WIDGETS & CHARTS
+   ========================================= */
+.stat-card {
+    border: 1px solid #eaeaea; border-radius: 16px; transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02); background: #fff; padding: 25px;
+}
+.stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
+.stat-card h2 { font-size: 26px; font-weight: 800; color: #222; margin-top: 5px; }
+
+.chart-card {
+    background: #fff; border: 1px solid #eaeaea; border-radius: 16px;
+    padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); height: 100%;
+}
+.chart-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; border-bottom: 1px dashed #eee; padding-bottom: 15px;
+}
+.chart-title { font-size: 16px; font-weight: 700; color: #333; margin: 0; }
+.chart-container { position: relative; height: 300px; width: 100%; }
+
+.table-card {
+    background: #fff; border: 1px solid #eaeaea; border-radius: 16px;
+    padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-top: 25px;
+}
+
+/* =========================================
+   RESPONSIF MOBILE
+   ========================================= */
+.sidebar-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
+}
+.btn-toggle-sidebar { display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0; }
+
+@media (max-width: 992px) {
+    .chart-container { height: 250px; }
+}
+
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+    .sidebar-overlay.show { display: block; }
+    .main-content { margin-left: 0 !important; padding: 15px; }
+    .btn-toggle-sidebar { display: block; }
+    .navbar-admin { padding: 15px; margin-bottom: 20px; }
+    .stat-card { padding: 20px; }
+    .chart-card { margin-bottom: 20px; }
+}
+
+@media (max-width: 576px) {
+    .user-profile span { display: none; }
+}

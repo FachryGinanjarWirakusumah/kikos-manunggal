@@ -414,6 +414,192 @@ $current_page = basename($_SERVER['PHP_SELF']);
 }
 
 /* =========================================
+   UI/UX RIWAYAT PEMESANAN (HISTORY)
+   ========================================= */
+.history-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.history-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.history-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #222;
+    margin: 0;
+}
+
+.history-card {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 15px;
+}
+
+.history-order-id {
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+}
+
+.history-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.history-card-body {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.history-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.history-details {
+    flex: 1;
+}
+
+.history-room-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+    margin: 0 0 5px 0;
+}
+
+.history-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ff385c; /* Kinara Pink */
+    margin: 0;
+}
+
+.history-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-berhasil { background: rgba(26, 188, 156, 0.1); color: #1abc9c; }
+.status-pending { background: rgba(243, 156, 18, 0.1); color: #f39c12; }
+.status-gagal { background: rgba(231, 76, 60, 0.1); color: #e74c3c; }
+
+.btn-history-action {
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.btn-history-action:hover {
+    background: #000;
+}
+
+/* Responsif Mobile */
+@media (max-width: 576px) {
+    .history-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .btn-history-action {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+
+/* =========================================
+   UI/UX PROFILE DROPDOWN
+   ========================================= */
+.profile-dropdown {
+    min-width: 200px; /* Melebarkan kotak agar teks tidak patah */
+    padding: 10px 0 !important; 
+    border-radius: 16px !important;
+    right: 0; /* Meratakan dropdown ke kanan agar tidak keluar layar */
+    left: auto !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+.profile-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #444;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.profile-menu-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #888;
+    transition: 0.2s ease;
+}
+
+/* Efek Hover untuk Menu Normal */
+.profile-menu-item:hover {
+    background-color: #f8f9fa;
+    color: var(--kinara-pink, #ff385c);
+}
+.profile-menu-item:hover i {
+    color: var(--kinara-pink, #ff385c);
+}
+
+/* Khusus Menu Logout */
+.logout-item {
+    color: #e74c3c !important;
+}
+.logout-item i {
+    color: #e74c3c !important;
+}
+.logout-item:hover {
+    background-color: rgba(231, 76, 60, 0.08); /* Background merah pudar */
+}
+
+/* =========================================
    MEDIA QUERIES (BREAKPOINTS)
    ========================================= */
 
@@ -546,8 +732,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <div class="dropdown-item">
                             <div class="icon-box"><i class="fas fa-clipboard-list"></i></div>
                             <div class="text">
-                                <strong>Aturan Kinara Kost</strong>
-                                <p>Penting untuk kalian ketahui ya</p>
+                                <strong class="translatable" data-en="Kinara Boarding Rules">Aturan Kinara Kost</strong>
+                                <p class="translatable" data-en="Important things you need to know.">Penting untuk kalian ketahui ya</p>
                             </div>
                         </div>
                     </a>
@@ -556,8 +742,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <div class="dropdown-item">
                             <div class="icon-box"><i class="fas fa-bed"></i></div>
                             <div class="text">
-                                <strong>Cek Kamar</strong>
-                                <p>Ayo cek kamar yang masih tersedia.</p>
+                                <strong class="translatable" data-en="Check Rooms">Cek Kamar</strong>
+                                <p class="translatable" data-en="Let's check available rooms.">Ayo cek kamar yang masih tersedia.</p>
                             </div>
                         </div>
                     </a>
@@ -597,11 +783,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <?php if(isset($_SESSION['login'])): ?>
                 <div class="dropdown-wrapper">
                     <button class="login-btn">
-                        <i class="far fa-user"></i> Halo, <?= $_SESSION['nama']; ?>
+                        <i class="far fa-user-circle" style="font-size: 18px; margin-right: 5px;"></i> 
+                        Halo, <?= $_SESSION['nama']; ?>
                     </button>
-                    <div class="dropdown-content">
-                        <a href="logout.php" style="color: red; padding: 10px; display: block; text-decoration: none;">
-                            <i class="fas fa-sign-out-alt"></i> <span class="translatable" data-en="Logout">Keluar</span>
+                    <div class="dropdown-content profile-dropdown">
+                        <a href="riwayat.php" class="profile-menu-item">
+                            <i class="fas fa-history"></i> 
+                            <span class="translatable" data-en="Order History">Riwayat Pesanan</span>
+                        </a>
+                        
+                        <hr style="margin: 5px 0; border-color: #f0f0f0;">
+
+                        <a href="logout.php" class="profile-menu-item logout-item">
+                            <i class="fas fa-sign-out-alt"></i> 
+                            <span class="translatable" data-en="Logout">Keluar</span>
                         </a>
                     </div>
                 </div>
@@ -610,7 +805,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <i class="far fa-user"></i> <span class="translatable" data-en="Login / Register">Masuk / Daftar</span>
                 </button>
             <?php endif; ?>
-
         </div>
     </div>
 </nav>
@@ -728,8 +922,14 @@ $h = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM hero_section WHERE id
             while($kamar = mysqli_fetch_assoc($query_kamar)): 
             ?>
             <div class="property-card" data-type="<?= $kamar['tipe']; ?>" style="<?= ($kamar['tipe'] == 'akhwat') ? 'display:none;' : ''; ?>">
-                <div class="card-image">
-                    <img src="img/<?= $kamar['gambar']; ?>" alt="<?= $kamar['nama_kamar']; ?>" onerror="this.src='https://via.placeholder.com/500x300'">
+                <div class="card-image" style="cursor: pointer; overflow: hidden;" onclick="window.location.href='proses_booking.php?id=<?= $kamar['id']; ?>'">                    
+                    <img src="img/<?= $kamar['gambar']; ?>" 
+                         alt="<?= $kamar['nama_kamar']; ?>" 
+                         onerror="this.src='https://via.placeholder.com/500x300'"
+                         style="transition: transform 0.3s ease;" 
+                         onmouseover="this.style.transform='scale(1.05)'" 
+                         onmouseout="this.style.transform='scale(1)'">
+                         
                     <?php if($kamar['is_featured']): ?>
                         <div class="badge-rukita" style="background: #ffc107; color: #000;">FEATURED</div>
                     <?php else: ?>

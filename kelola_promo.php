@@ -16,11 +16,12 @@ function isExpired($date) {
 // --- LOGIKA TAMBAH PROMO ---
 if (isset($_POST['upload_promo'])) {
     $judul = mysqli_real_escape_string($conn, $_POST['judul']);
-    $tgl_akhir = mysqli_real_escape_string($conn, $_POST['tanggal_akhir']); // Ambil tanggal
+    $diskon = (int)$_POST['diskon']; // Tangkap nominal diskon
+    $tgl_akhir = mysqli_real_escape_string($conn, $_POST['tanggal_akhir']);
     $file_name = time() . '_' . $_FILES['gambar']['name'];
     
     if (move_uploaded_file($_FILES['gambar']['tmp_name'], "img/promo/" . $file_name)) {
-        mysqli_query($conn, "INSERT INTO promo (judul, gambar, tanggal_akhir) VALUES ('$judul', '$file_name', '$tgl_akhir')");
+        mysqli_query($conn, "INSERT INTO promo (judul, diskon, gambar, tanggal_akhir) VALUES ('$judul', '$diskon', '$file_name', '$tgl_akhir')");
         header("Location: kelola_promo.php?msg=success");
         exit;
     }
@@ -30,9 +31,10 @@ if (isset($_POST['upload_promo'])) {
 if (isset($_POST['update_promo'])) {
     $id = (int)$_POST['id_promo'];
     $judul = mysqli_real_escape_string($conn, $_POST['judul']);
-    $tgl_akhir = mysqli_real_escape_string($conn, $_POST['tanggal_akhir']); // Ambil tanggal
+    $diskon = (int)$_POST['diskon']; // Tangkap nominal diskon
+    $tgl_akhir = mysqli_real_escape_string($conn, $_POST['tanggal_akhir']);
     
-    $sql = "UPDATE promo SET judul='$judul', tanggal_akhir='$tgl_akhir'";
+    $sql = "UPDATE promo SET judul='$judul', diskon='$diskon', tanggal_akhir='$tgl_akhir'";
 
     if ($_FILES['gambar']['name'] != "") {
         $file_name = time() . '_' . $_FILES['gambar']['name'];
@@ -204,7 +206,38 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
     transform: translateY(-5px);
     transition: 0.3s;
 }
-    </style>
+
+/* =========================================
+           UI/UX RESPONSIVE ADMIN (MOBILE FIRST)
+           ========================================= */
+        
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
+        }
+
+        .btn-toggle-sidebar {
+            display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0;
+        }
+
+        .sidebar { z-index: 999; transition: transform 0.3s ease-in-out; }
+
+        @media (max-width: 768px) {
+            /* Sembunyikan Sidebar ke Kiri */
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay.show { display: block; }
+
+            /* Konten Utama Penuhi Layar */
+            .main-content { margin-left: 0 !important; padding: 15px; }
+            
+            /* Tampilkan Tombol Hamburger & Rapikan Header */
+            .btn-toggle-sidebar { display: block; }
+            .header-admin-mobile { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+            .header-admin-mobile h3 { font-size: 22px; margin-bottom: 0 !important; }
+        }
+
+</style>
 </head>
 <body class="bg-light">
 
@@ -252,6 +285,7 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
                 <i class="fas fa-wallet me-2"></i> Pembayaran
             </a>
         </li>
+        <li class="nav-item"><a href="data_penghuni.php" class="nav-link"><i class="fas fa-user-check me-2"></i> Data Penghuni</a></li>
     </ul>
 
     <span class="nav-group-label">Tampilan User</span>
@@ -266,6 +300,7 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
                 <i class="fas fa-star me-2"></i> Keuntungan
             </a>
         </li>
+        <li class="nav-item"><a href="kelola_hero.php" class="nav-link"><i class="fas fa-image me-2"></i> Banner</a></li>            
     </ul>
 
     <span class="nav-group-label">Laporan</span>
@@ -288,20 +323,38 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
     </ul>
 </div>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <div class="main-content">
-    <h3 class="fw-bold mb-4">Edit Promo Berlangsung</h3>
     
-    <div class="card border-0 shadow-sm p-4 mb-4 rounded-4">
-        <h6 class="fw-bold">Tambah Banner Promo Baru</h6>
+    <div class="header-admin-mobile">
+        <button class="btn-toggle-sidebar" id="btnToggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h3 class="fw-bold mb-4">Edit Promo Berlangsung</h3>
+    </div>
+
+<div class="card border-0 shadow-sm p-4 mb-4 rounded-4">
+        <h6 class="fw-bold mb-3"><i class="fas fa-ticket-alt text-danger me-2"></i>Tambah Banner & Kode Promo Baru</h6>
         <form action="" method="POST" enctype="multipart/form-data" class="row g-3">
-            <div class="col-md-6">
-                <input type="text" name="judul" class="form-control" placeholder="Judul Promo (Misal: Diskon Ramadhan)" required>
+            <div class="col-md-3">
+                <label class="small fw-bold text-muted mb-1">Kode Promo</label>
+                <input type="text" name="judul" class="form-control fw-bold" placeholder="Contoh: KINARA10" style="text-transform: uppercase;" required>
             </div>
-            <div class="col-md-4">
-                <input type="file" name="gambar" class="form-control" required>
+            <div class="col-md-3">
+                <label class="small fw-bold text-muted mb-1">Nominal Diskon (Rp)</label>
+                <input type="number" name="diskon" class="form-control" placeholder="Contoh: 50000" required>
             </div>
             <div class="col-md-2">
-                <button type="submit" name="upload_promo" class="btn btn-danger w-100">Upload</button>
+                <label class="small fw-bold text-muted mb-1">Berlaku Sampai</label>
+                <input type="date" name="tanggal_akhir" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <label class="small fw-bold text-muted mb-1">Upload Banner</label>
+                <input type="file" name="gambar" class="form-control" accept="image/*" required>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" name="upload_promo" class="btn btn-danger w-100 fw-bold"><i class="fas fa-save"></i></button>
             </div>
         </form>
     </div>
@@ -313,14 +366,17 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
                     <img src="img/promo/<?= $p['gambar']; ?>" class="promo-preview" onerror="this.src='https://via.placeholder.com/400x200?text=Gambar+Rusak'">
                     
                     <div class="p-3 d-flex justify-content-between align-items-center">
-                        <div class="text-truncate me-2" style="max-width: 140px;">
-                            <small class="fw-bold text-dark"><?= $p['judul']; ?></small>
+                        <div class="text-truncate me-2">
+                            <span class="badge bg-danger mb-1"><?= $p['judul']; ?></span><br>
+                            <small class="text-muted" style="font-size: 11px;">s/d <?= date('d M Y', strtotime($p['tanggal_akhir'])); ?></small>
                         </div>
                         
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-light border text-primary btn-edit-promo" 
                                     data-id="<?= $p['id']; ?>" 
-                                    data-judul="<?= $p['judul']; ?>">
+                                    data-judul="<?= $p['judul']; ?>"
+                                    data-diskon="<?= $p['diskon']; ?>"
+                                    data-tanggal="<?= $p['tanggal_akhir']; ?>">
                                 <i class="fas fa-edit"></i>
                             </button>
 
@@ -330,7 +386,8 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                    </div> </div> </div> <?php endwhile; ?>
+                    </div>
+                </div> </div> <?php endwhile; ?>
         <?php else: ?>
             <div class="col-12 text-center py-5">
                 <img src="https://illustrations.popsy.co/gray/not-found.svg" style="width: 200px;" class="mb-3">
@@ -351,28 +408,31 @@ $promos = mysqli_query($conn, "SELECT * FROM promo ORDER BY id DESC");
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="small fw-bold">Judul Promo</label>
-                        <input type="text" name="judul" id="edit_judul" class="form-control" required>
+                        <label class="small fw-bold">Kode Promo</label>
+                        <input type="text" name="judul" id="edit_judul" class="form-control fw-bold" style="text-transform: uppercase;" required>
                     </div>
                     <div class="mb-3">
-                        <label class="small fw-bold">Ganti Gambar (Kosongkan jika tidak diganti)</label>
-                        <input type="file" name="gambar" class="form-control">
+                        <label class="small fw-bold">Nominal Diskon (Rp)</label>
+                        <input type="number" name="diskon" id="edit_diskon" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold">Berlaku Sampai</label>
+                        <input type="date" name="tanggal_akhir" id="edit_tanggal" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold">Ganti Banner (Opsional)</label>
+                        <input type="file" name="gambar" class="form-control" accept="image/*">
                     </div>
                 </div>
-                <div class="modal-footer border-0">
-                    <button type="submit" name="update_promo" class="btn btn-danger w-100 rounded-3">Simpan Perubahan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.querySelectorAll('.btn-edit-promo').forEach(btn => {
+document.querySelectorAll('.btn-edit-promo').forEach(btn => {
         btn.addEventListener('click', function() {
             document.getElementById('edit_id').value = this.dataset.id;
             document.getElementById('edit_judul').value = this.dataset.judul;
+            document.getElementById('edit_diskon').value = this.dataset.diskon; // Parsing diskon
+            document.getElementById('edit_tanggal').value = this.dataset.tanggal;
             var myModal = new bootstrap.Modal(document.getElementById('modalEditPromo'));
             myModal.show();
         });
@@ -441,6 +501,27 @@ document.getElementById('btnLogout')?.addEventListener('click', function() {
         }
     });
 });
+
+// === LOGIKA HAMBURGER MENU ADMIN (MOBILE) ===
+const sidebar = document.querySelector('.sidebar');
+const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Kunci scroll halaman utama
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Buka kembali scroll
+    });
+}
 </script>
 </body>
 </html>

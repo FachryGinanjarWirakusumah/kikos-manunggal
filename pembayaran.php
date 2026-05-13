@@ -119,6 +119,41 @@ $query = mysqli_query($conn, "SELECT p.*, u.nama, k.nama_kamar
         .status-badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; }
         .bukti-img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .bukti-img:hover { transform: scale(1.1); }
+
+        /* =========================================
+           UI/UX RESPONSIVE ADMIN (MOBILE FIRST)
+           ========================================= */
+        
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
+        }
+
+        .btn-toggle-sidebar {
+            display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0;
+        }
+
+        .sidebar { z-index: 999; transition: transform 0.3s ease-in-out; }
+
+        @media (max-width: 768px) {
+            /* Sembunyikan Sidebar */
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay.show { display: block; }
+
+            /* Konten Utama */
+            .main-content { margin-left: 0 !important; padding: 15px; }
+            .btn-toggle-sidebar { display: block; }
+            
+            /* Penyesuaian Header Admin di HP */
+            .header-admin-mobile { flex-direction: row; justify-content: flex-start !important; gap: 15px; }
+            .admin-name-text { display: none; } /* Sembunyikan nama admin agar judul tidak sesak di HP */
+            
+            /* Penyesuaian Tabel agar discroll horizontal (tidak merusak tombol aksi) */
+            .table-responsive { border-radius: 10px; border: 1px solid #eee; }
+            .table td, .table th { white-space: nowrap; } 
+        }
+
     </style>
 </head>
 <body>
@@ -156,6 +191,7 @@ $query = mysqli_query($conn, "SELECT p.*, u.nama, k.nama_kamar
                 <i class="fas fa-wallet me-2"></i> Pembayaran
             </a>
         </li>
+        <li class="nav-item"><a href="data_penghuni.php" class="nav-link"><i class="fas fa-user-check me-2"></i> Data Penghuni</a></li>
     </ul>
 
 <span class="nav-group-label">Tampilan User</span>
@@ -170,15 +206,7 @@ $query = mysqli_query($conn, "SELECT p.*, u.nama, k.nama_kamar
                 <i class="fas fa-star me-2"></i> Keuntungan
             </a>
         </li>
-    </ul>
-
-    <span class="nav-group-label">Laporan</span>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a href="laporan.php" class="nav-link">
-                <i class="fas fa-chart-line me-2"></i> Statistik Booking
-            </a>
-        </li>
+        <li class="nav-item"><a href="kelola_hero.php" class="nav-link"><i class="fas fa-image me-2"></i> Banner</a></li>            
     </ul>
 
     <hr>
@@ -192,10 +220,18 @@ $query = mysqli_query($conn, "SELECT p.*, u.nama, k.nama_kamar
     </ul>
 </div>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <div class="main-content">
-    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm">
-        <h5 class="fw-bold mb-0">Konfirmasi Pembayaran</h5>
-        <div class="small text-muted">Admin: <?= $_SESSION['nama']; ?></div>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm header-admin-mobile">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn-toggle-sidebar" id="btnToggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="fw-bold mb-0">Konfirmasi Pembayaran</h5>
+        </div>
+        <div class="small text-muted admin-name-text">Admin: <?= $_SESSION['nama']; ?></div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 p-3">
@@ -270,6 +306,27 @@ document.getElementById('btnLogout')?.addEventListener('click', function() {
         }
     });
 });
+
+// === LOGIKA HAMBURGER MENU ADMIN (MOBILE) ===
+const sidebar = document.querySelector('.sidebar');
+const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Kunci scroll belakang
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Buka kunci scroll
+    });
+}
 </script>
 </body>
 </html>

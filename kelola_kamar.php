@@ -120,6 +120,40 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
         .img-kamar { width: 80px; height: 60px; object-fit: cover; border-radius: 8px; }
         .btn-featured { transition: all 0.3s; }
         .btn-featured:hover { transform: scale(1.1); }
+
+        /* =========================================
+           UI/UX RESPONSIVE ADMIN (MOBILE FIRST)
+           ========================================= */
+        
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
+        }
+
+        .btn-toggle-sidebar {
+            display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0;
+        }
+
+        .sidebar { z-index: 999; transition: transform 0.3s ease-in-out; }
+
+        @media (max-width: 768px) {
+            /* Sembunyikan Sidebar */
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay.show { display: block; }
+
+            /* Konten Utama */
+            .main-content { margin-left: 0 !important; padding: 15px; }
+            .btn-toggle-sidebar { display: block; }
+            
+            /* Penyesuaian Header & Tombol Tambah di HP */
+            .header-admin-mobile { flex-direction: column; align-items: flex-start !important; gap: 15px; }
+            .header-admin-mobile .btn { width: 100%; justify-content: center; }
+            
+            /* Penyesuaian Tabel agar bisa discroll horizontal tanpa merusak baris */
+            .table-responsive { border-radius: 10px; border: 1px solid #eee; }
+            .table td, .table th { white-space: nowrap; } 
+        }
     </style>
 </head>
 <body>
@@ -168,6 +202,7 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
                 <i class="fas fa-wallet me-2"></i> Pembayaran
             </a>
         </li>
+        <li class="nav-item"><a href="data_penghuni.php" class="nav-link"><i class="fas fa-user-check me-2"></i> Data Penghuni</a></li>        
     </ul>
 
 <span class="nav-group-label">Tampilan User</span>
@@ -182,14 +217,7 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
                 <i class="fas fa-star me-2"></i> Keuntungan
             </a>
         </li>
-    </ul>
-
-    <span class="nav-group-label">Laporan</span>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a href="laporan.php" class="nav-link">
-                <i class="fas fa-chart-line me-2"></i> Statistik Booking
-            </a>
+        <li class="nav-item"><a href="kelola_hero.php" class="nav-link"><i class="fas fa-image me-2"></i> Banner</a></li>            
         </li>
     </ul>
 
@@ -204,9 +232,17 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
     </ul>
 </div>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <div class="main-content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold mb-0">Daftar Unit Kost</h4>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 header-admin-mobile">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn-toggle-sidebar" id="btnToggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h4 class="fw-bold mb-0">Daftar Unit Kost</h4>
+        </div>
         <button id="btnTambahBaru" class="btn btn-danger px-4 rounded-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">
             <i class="fas fa-plus me-2"></i> Tambah Kamar
         </button>
@@ -257,7 +293,7 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
                                             data-harga="<?= $row['harga']; ?>"
                                             data-tipe="<?= $row['tipe']; ?>"
                                             data-status="<?= $row['status']; ?>"
-                                            data-deskripsi="<?= htmlspecialchars($row['deskripsi']); ?>"> <i class="fas fa-edit text-primary"></i>
+                                            data-deskripsi="<?= htmlspecialchars($row['deskripsi'] ?? ''); ?>"> <i class="fas fa-edit text-primary"></i>
                                     </button>
                                     <button class="btn btn-sm btn-light border btn-hapus" 
                                             data-id="<?= $row['id']; ?>" 
@@ -330,10 +366,18 @@ document.querySelectorAll('.btn-edit').forEach(btn => {
                     const div = document.createElement('div');
                     div.className = 'position-relative border rounded p-1 bg-white';
                     div.style.width = '100px';
-                    div.innerHTML = `<img src="img/galeri/${item.file_name}" style="width:100%; height:60px; object-fit:cover;">
+                    // Deteksi apakah file tersebut adalah video
+                    const isVideo = item.file_name.toLowerCase().endsWith('.mp4');
+                    
+                    // Jika video, gunakan tag <video>. Jika gambar, gunakan <img> dengan fungsi onerror
+                    const mediaTag = isVideo 
+                        ? `<video src="img/galeri/${item.file_name}" style="width:100%; height:60px; object-fit:cover; background:#222;"></video>`
+                        : `<img src="img/galeri/${item.file_name}" style="width:100%; height:60px; object-fit:cover;" onerror="this.src='https://placehold.co/100x60/f8f9fa/ff385c?text=Hilang'">`;
+
+                    div.innerHTML = `${mediaTag}
                         <div class="d-flex justify-content-between mt-1">
-                            <button type="button" onclick="setSampul(${idKamar}, '${item.file_name}')" class="btn btn-sm btn-warning p-1 text-white"><i class="fas fa-star"></i></button>
-                            <button type="button" onclick="hapusSatuFile(${item.id}, this)" class="btn btn-sm btn-danger p-1"><i class="fas fa-trash"></i></button>
+                            <button type="button" onclick="setSampul(${idKamar}, '${item.file_name}')" class="btn btn-sm btn-warning p-1 text-white" title="Jadikan Sampul Utama"><i class="fas fa-star"></i></button>
+                            <button type="button" onclick="hapusSatuFile(${item.id}, this)" class="btn btn-sm btn-danger p-1" title="Hapus File"><i class="fas fa-trash"></i></button>
                         </div>`;
                     listGaleri.appendChild(div);
                 });
@@ -385,6 +429,27 @@ document.getElementById('btnTambahBaru').onclick = () => {
     document.getElementById('container-galeri-edit').style.display = 'none';
     if(document.getElementById('edit_id')) document.getElementById('edit_id').remove();
 };
+
+// === LOGIKA HAMBURGER MENU ADMIN (MOBILE) ===
+const sidebar = document.querySelector('.sidebar');
+const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+        sidebar.classList.add('show');
+        sidebarOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Kunci scroll belakang
+    });
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Buka kunci scroll
+    });
+}
 </script>
 </body>
 </html>

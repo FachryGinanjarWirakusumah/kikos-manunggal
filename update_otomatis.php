@@ -1,44 +1,44 @@
 <?php
-include 'config.php';
 session_start();
+include 'config.php';
+
+// Pastikan user sedang login agar kita bisa mengambil ID-nya
+if (!isset($_SESSION['id']) && !isset($_SESSION['user_id'])) {
+    die("Error: Sesi user tidak ditemukan. Silakan login kembali.");
+}
+
+// Ambil ID User dari session (Sesuaikan jika nama session loginmu 'id' atau 'user_id')
+$id_user = isset($_SESSION['id']) ? $_SESSION['id'] : $_SESSION['user_id'];
 
 // 1. Ambil data dari URL (dikirim dari bayar.php)
 $order_id = isset($_GET['order_id']) ? mysqli_real_escape_string($conn, $_GET['order_id']) : '';
 $id_kamar = isset($_GET['id_kamar']) ? (int)$_GET['id_kamar'] : 0;
 $nominal  = isset($_GET['nominal']) ? (int)$_GET['nominal'] : 0;
 
-// 2. Ambil data dari Session (Data form yang diisi user)
-if (isset($_SESSION['temp_booking'])) {
-    $data = $_SESSION['temp_booking'];
-    $nama = mysqli_real_escape_string($conn, $data['nama']);
-    $kontak = mysqli_real_escape_string($conn, $data['kontak']);
+// 2. Proses Insert ke Tabel Pembayaran Asli Kinara
+// Berikan penanda "bukti transfer" otomatis karena ini bebas biaya atau otomatis Midtrans
+$bukti_sistem = ($nominal <= 0) ? 'Promo-Gratis.png' : 'Midtrans-Otomatis.png';
 
-    // --- PROSES A: Masukkan ke Tabel Booking (Untuk Daftar Penyewa Terbaru) ---
-    $query_booking = "INSERT INTO booking (nama, kontak, id_kamar, status, order_id) 
-                      VALUES ('$nama', '$kontak', '$id_kamar', 'Berhasil', '$order_id')";
+// PERBAIKAN: Tambahkan kolom order_id agar sukses.php bisa membaca datanya!
+$query_pembayaran = "INSERT INTO pembayaran (id_user, id_kamar, jumlah_bayar, bukti_transfer, status_pembayaran, order_id) 
+                     VALUES ('$id_user', '$id_kamar', '$nominal', '$bukti_sistem', 'berhasil', '$order_id')";
+
+if (mysqli_query($conn, $query_pembayaran)) {
     
-    // --- PROSES B: Masukkan ke Tabel Pembayaran (Untuk Laporan Keuangan) ---
-    // Sesuaikan nama kolom 'penyewa', 'unit_kamar', dll dengan database kamu
-    $query_pembayaran = "INSERT INTO pembayaran (penyewa, unit_kamar, nominal, bukti, status, order_id) 
-                         VALUES ('$nama', '$id_kamar', '$nominal', 'Midtrans-Otomatis', 'Berhasil', '$order_id')";
+    // 3. Update Status Kamar jadi Penuh
+    mysqli_query($conn, "UPDATE kamar SET status = 'penuh' WHERE id = $id_kamar");
 
-    // Jalankan kedua query
-    if (mysqli_query($conn, $query_booking) && mysqli_query($conn, $query_pembayaran)) {
-        
-        // --- PROSES C: Update Status Kamar jadi Penuh ---
-        mysqli_query($conn, "UPDATE kamar SET status = 'penuh' WHERE id = $id_kamar");
-
-        // Hapus session sementara agar tidak double input
+    // Bersihkan keranjang sementara
+    if (isset($_SESSION['temp_booking'])) {
         unset($_SESSION['temp_booking']);
-
-        // Lempar ke halaman utama dengan pesan sukses
-        header("Location: index.php?msg=success_payment");
-        exit;
-    } else {
-        echo "Gagal update database: " . mysqli_error($conn);
     }
-} else {
-    // Jika tidak ada data session, kembalikan ke index
-    header("Location: index.php");
+
+    // Arahkan ke halaman ringkasan sukses
+    header("Location: sukses.php?order_id=" . $order_id);
     exit;
+} else {
+    // Jika gagal, tampilkan pesan error yang rapi
+    echo "<h3>Terjadi Kesalahan Sistem!</h3>";
+    echo "<p>Gagal menyimpan ke database: " . mysqli_error($conn) . "</p>";
 }
+?>

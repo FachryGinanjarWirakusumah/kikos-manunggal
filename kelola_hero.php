@@ -140,6 +140,39 @@ if (isset($_POST['update_hero'])) {
             border-radius: 12px;
         }
         .preview-hero { width: 100%; max-height: 300px; object-fit: cover; border-radius: 15px; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        /* =========================================
+           UI/UX RESPONSIVE ADMIN (MOBILE FIRST)
+           ========================================= */
+        
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 998;
+        }
+
+        .btn-toggle-sidebar {
+            display: none; background: none; border: none; font-size: 22px; color: #212529; cursor: pointer; padding: 0;
+        }
+
+        .sidebar { z-index: 999; transition: transform 0.3s ease-in-out; }
+
+        @media (max-width: 768px) {
+            /* Sembunyikan Sidebar ke Kiri */
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+            .sidebar-overlay.show { display: block; }
+
+            /* Konten Utama Penuhi Layar */
+            .main-content { margin-left: 0 !important; padding: 15px; }
+            
+            /* Tampilkan Tombol Hamburger & Rapikan Header */
+            .btn-toggle-sidebar { display: block; }
+            .header-admin-mobile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+            .header-admin-mobile h3 { font-size: 22px; margin-bottom: 0 !important; }
+
+            /* Sesuaikan tinggi preview gambar di HP */
+            .preview-hero { max-height: 200px; }
+        }
     </style>
 </head>
 <body>
@@ -177,6 +210,7 @@ if (isset($_POST['update_hero'])) {
                 <i class="fas fa-wallet me-2"></i> <span class="translatable" data-en="Payments">Pembayaran</span>
             </a>
         </li>
+        <li class="nav-item"><a href="data_penghuni.php" class="nav-link"><i class="fas fa-user-check me-2"></i> Data Penghuni</a></li>
     </ul>
 
 <span class="nav-group-label translatable" data-en="User Interface">Tampilan User</span>
@@ -198,15 +232,6 @@ if (isset($_POST['update_hero'])) {
         </li>
     </ul>
 
-    <span class="nav-group-label translatable" data-en="Reports">Laporan</span>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a href="laporan.php" class="nav-link">
-                <i class="fas fa-chart-line me-2"></i> <span class="translatable" data-en="Booking Stats">Statistik Booking</span>
-            </a>
-        </li>
-    </ul>
-
     <hr>
 
     <ul class="nav flex-column">
@@ -218,8 +243,16 @@ if (isset($_POST['update_hero'])) {
     </ul>
 </div>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <div class="main-content">
-    <h3 class="fw-bold mb-4 translatable" data-en="Hero Banner Settings">Pengaturan Hero Banner</h3>
+    
+    <div class="header-admin-mobile">
+        <button class="btn-toggle-sidebar" id="btnToggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h3 class="fw-bold mb-0 translatable" data-en="Hero Banner Settings">Pengaturan Hero Banner</h3>
+    </div>
 
     <div class="row">
         <div class="col-md-8">
@@ -306,6 +339,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+// === 0. LOGIKA HAMBURGER MENU ADMIN (MOBILE) ===
+    const sidebar = document.querySelector('.sidebar');
+    const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (btnToggleSidebar) {
+        btnToggleSidebar.addEventListener('click', () => {
+            sidebar.classList.add('show');
+            sidebarOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Kunci scroll halaman saat menu buka
+        });
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Lepas kunci scroll
+        });
+    }
 </script>
 </body>
 </html>
