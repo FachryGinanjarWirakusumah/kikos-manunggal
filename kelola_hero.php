@@ -11,18 +11,32 @@ if (isset($_POST['update_hero'])) {
     $judul = mysqli_real_escape_string($conn, $_POST['judul']);
     $sub_judul = mysqli_real_escape_string($conn, $_POST['sub_judul']);
     
-    if ($_FILES['gambar']['name'] != "") {
-        $file_name = time() . '_' . $_FILES['gambar']['name'];
-        if (move_uploaded_file($_FILES['gambar']['tmp_name'], "img/" . $file_name)) {
-            // Hapus gambar lama jika bukan default
-            if ($hero['gambar'] != 'hero-bg.jpg' && file_exists("img/" . $hero['gambar'])) {
-                unlink("img/" . $hero['gambar']);
+    // Siapkan query default (Update teks saja)
+    $query_update = "UPDATE hero_section SET judul='$judul', sub_judul='$sub_judul' WHERE id=1";
+
+    // Jika admin memilih file gambar baru
+    if (isset($_FILES['gambar']['name']) && $_FILES['gambar']['name'] != "") {
+        
+        // PENGAMAN 1: Pastikan tidak ada error upload (misal file kebesaran)
+        if ($_FILES['gambar']['error'] === 0) {
+            $file_name = time() . '_' . rand(100,999) . '_' . preg_replace("/[^a-zA-Z0-9.]/", "_", $_FILES['gambar']['name']);
+            
+            // PENGAMAN 2: Pastikan file sukses dipindah ke folder
+            if (move_uploaded_file($_FILES['gambar']['tmp_name'], "img/" . $file_name)) {
+                
+                // Jika sukses masuk folder, ubah query agar ikut memperbarui nama gambar di database
+                $query_update = "UPDATE hero_section SET judul='$judul', sub_judul='$sub_judul', gambar='$file_name' WHERE id=1";
+                
+                // Hapus gambar lama jika bukan default
+                if ($hero['gambar'] != 'hero-bg.jpg' && file_exists("img/" . $hero['gambar'])) {
+                    unlink("img/" . $hero['gambar']);
+                }
             }
-            mysqli_query($conn, "UPDATE hero_section SET judul='$judul', sub_judul='$sub_judul', gambar='$file_name' WHERE id=1");
         }
-    } else {
-        mysqli_query($conn, "UPDATE hero_section SET judul='$judul', sub_judul='$sub_judul' WHERE id=1");
     }
+    
+    // Eksekusi query (Apapun yang terjadi pada gambar, Teks pasti akan tetap tersimpan!)
+    mysqli_query($conn, $query_update);
     header("Location: kelola_hero.php?msg=success");
     exit;
 }
@@ -258,6 +272,8 @@ if (isset($_POST['update_hero'])) {
         <div class="col-md-8">
             <div class="card border-0 shadow-sm rounded-4 p-4">
                 <form action="" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="update_hero" value="1">
+                    
                     <div class="mb-3">
                         <label class="fw-bold small mb-2 translatable" data-en="Main Title (Heading)">Judul Utama (Heading)</label>
                         <input type="text" name="judul" class="form-control" value="<?= $hero['judul'] ?>" required>
@@ -271,7 +287,7 @@ if (isset($_POST['update_hero'])) {
                         <input type="file" name="gambar" class="form-control" accept="image/*">
                         <div class="form-text text-muted mt-2 translatable" data-en="Recommended size: 1920 x 1080 px to avoid pixelation.">Rekomendasi ukuran: 1920 x 1080 px agar tidak pecah.</div>
                     </div>
-                    <button type="submit" name="update_hero" class="btn btn-danger px-4 fw-bold">
+                    <button type="submit" class="btn btn-danger px-4 fw-bold">
                         <i class="fas fa-save me-2"></i> <span class="translatable" data-en="Save Changes">Simpan Perubahan</span>
                     </button>
                 </form>
