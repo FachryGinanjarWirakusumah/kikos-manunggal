@@ -113,6 +113,7 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
             margin: 20px 15px;
         }
         
+        /* Main Content Area */
         .main-content { margin-left: 250px; padding: 30px; }
         .navbar-admin { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 30px; padding: 15px 25px; border-radius: 12px; }
         
@@ -277,7 +278,7 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
                                 <div class="fw-bold"><?= $row['nama_kamar']; ?></div>
                                 <span class="badge bg-light text-dark border fw-normal"><i class="fas fa-<?= $row['tipe'] == 'ikhwan' ? 'male text-primary' : 'female text-danger'; ?> me-1"></i> <?= ucfirst($row['tipe']); ?></span>
                             </td>
-                            <td class="fw-bold">Rp <?= number_format($row['harga'], 0, ',', '.'); ?></td>
+                            <td class="fw-bold text-success">Rp <?= number_format($row['harga'], 0, ',', '.'); ?></td>
                             <td class="text-center">
                                 <a href="?toggle_featured=<?= $row['id']; ?>&val=<?= $row['is_featured']; ?>" class="btn btn-sm <?= $row['is_featured'] ? 'btn-warning' : 'btn-outline-secondary'; ?>">
                                     <i class="fas fa-star"></i>
@@ -320,7 +321,14 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
                     <div class="mb-3"><label class="small fw-bold">Nama Kamar</label><input type="text" name="nama_kamar" class="form-control" required></div>
                     <div class="mb-3"><label class="small fw-bold">Lokasi</label><input type="text" name="lokasi" class="form-control" required></div>
                     <div class="row">
-                        <div class="col-6 mb-3"><label class="small fw-bold">Harga</label><input type="number" name="harga" class="form-control" required></div>
+                        <div class="col-6 mb-3">
+                            <label class="small fw-bold">Harga</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted">Rp</span>
+                                <input type="text" id="hargaTampil" class="form-control" required placeholder="1.500.000">
+                                <input type="hidden" name="harga" id="hargaAsli">
+                            </div>
+                        </div>
                         <div class="col-6 mb-3"><label class="small fw-bold">Tipe</label><select name="tipe" class="form-select"><option value="ikhwan">Ikhwan</option><option value="akhwat">Akhwat</option></select></div>
                     </div>
                     <div class="mb-3">
@@ -350,6 +358,26 @@ $query_lokasi = mysqli_query($conn, "SELECT DISTINCT lokasi FROM kamar ORDER BY 
 <script>
 const modalElemen = document.getElementById('modalTambah');
 const modalInstance = new bootstrap.Modal(modalElemen);
+
+// === LOGIKA FORMAT RUPIAH OTOMATIS SAAT MENGETIK ===
+const hargaTampil = document.getElementById('hargaTampil');
+const hargaAsli = document.getElementById('hargaAsli');
+
+hargaTampil.addEventListener('input', function(e) {
+    // 1. Hapus semua karakter yang bukan angka
+    let angkaMurni = this.value.replace(/[^0-9]/g, '');
+    
+    // 2. Set angka murni ke hidden input (untuk disimpan ke DB)
+    hargaAsli.value = angkaMurni;
+    
+    // 3. Tampilkan angka dengan titik (format Rupiah) ke user
+    if (angkaMurni !== '') {
+        this.value = new Intl.NumberFormat('id-ID').format(angkaMurni);
+    } else {
+        this.value = '';
+    }
+});
+// =================================================
 
 document.querySelectorAll('.btn-edit').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -389,7 +417,11 @@ document.querySelectorAll('.btn-edit').forEach(btn => {
 
         modalElemen.querySelector('input[name="nama_kamar"]').value = this.dataset.nama;
         modalElemen.querySelector('input[name="lokasi"]').value = this.dataset.lokasi;
-        modalElemen.querySelector('input[name="harga"]').value = this.dataset.harga;
+        
+        // PENTING: Set harga bersih ke database, set harga bertitik ke tampilan
+        hargaAsli.value = this.dataset.harga;
+        hargaTampil.value = new Intl.NumberFormat('id-ID').format(this.dataset.harga);
+        
         modalElemen.querySelector('select[name="tipe"]').value = this.dataset.tipe;
         modalElemen.querySelector('select[name="status"]').value = this.dataset.status;
         modalElemen.querySelector('textarea[name="deskripsi"]').value = this.dataset.deskripsi;
@@ -426,6 +458,8 @@ document.querySelectorAll('.btn-hapus').forEach(btn => {
 
 document.getElementById('btnTambahBaru').onclick = () => {
     modalElemen.querySelector('form').reset();
+    hargaAsli.value = ''; // Kosongkan hidden input harga
+    hargaTampil.value = ''; // Kosongkan tampilan harga
     document.getElementById('container-galeri-edit').style.display = 'none';
     if(document.getElementById('edit_id')) document.getElementById('edit_id').remove();
 };
