@@ -236,7 +236,7 @@ $q_terbaru = mysqli_query($conn, "SELECT u.nama, u.kontak, k.nama_kamar, k.lokas
     <ul class="nav flex-column"><li class="nav-item"><a href="admin_dashboard.php" class="nav-link active"><i class="fas fa-th-large me-2"></i> Dashboard</a></li></ul>
     <span class="nav-group-label">Manajemen Kost</span>
     <ul class="nav flex-column">
-        <li class="nav-item"><a href="kelola_kamar.php" class="nav-link"><i class="fas fa-bed me-2"></i> Kelola Kamar</a></li>
+        <li class="nav-item"><a href="admin/kamar/kelola_kamar.php" class="nav-link"><i class="fas fa-bed me-2"></i> Kelola Kamar</a></li>
         <li class="nav-item"><a href="data_penyewa.php" class="nav-link"><i class="fas fa-users me-2"></i> Data Pengguna</a></li>
         <li class="nav-item"><a href="pembayaran.php" class="nav-link"><i class="fas fa-wallet me-2"></i> Pembayaran</a></li>
         <li class="nav-item"><a href="data_penghuni.php" class="nav-link"><i class="fas fa-user-check me-2"></i> Data Penghuni</a></li>

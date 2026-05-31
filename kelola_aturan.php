@@ -183,7 +183,7 @@ $semua_aturan = mysqli_query($conn, "SELECT * FROM aturan_kost ORDER BY urutan A
     <span class="nav-group-label">Manajemen Kost</span>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="kelola_kamar.php" class="nav-link">
+            <a href="admin/kamar/kelola_kamar.php" class="nav-link">
                 <i class="fas fa-bed me-2"></i> Kelola Kamar
             </a>
         </li>

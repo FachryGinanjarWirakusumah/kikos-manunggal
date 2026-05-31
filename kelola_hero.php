@@ -122,7 +122,7 @@ if (isset($_POST['update_hero'])) {
     <span class="nav-group-label translatable" data-en="Boarding Management">Manajemen Kost</span>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="kelola_kamar.php" class="nav-link">
+            <a href="admin/kamar/kelola_kamar.php" class="nav-link">
                 <i class="fas fa-bed me-2"></i> <span class="translatable" data-en="Manage Rooms">Kelola Kamar</span>
             </a>
         </li>
